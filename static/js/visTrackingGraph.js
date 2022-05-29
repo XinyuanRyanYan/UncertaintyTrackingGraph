@@ -26,6 +26,7 @@ class VisTrackingGraph{
         this.initScale();
 
         // 5. visulize the axis, text, and the time bars
+        this.timeLinesSelection = '';
         this.visCoordsSys();
 
         // 6. visualize the legend
@@ -65,7 +66,7 @@ class VisTrackingGraph{
             timelineData.push(this.xScale(i));
         }
 
-        let timeLinesSelection = this.TGSvg
+        this.timeLinesSelection = this.TGSvg
             .attr('id', 'timestamps')
             .selectAll('#timestamp')
             .data(timelineData)
@@ -89,10 +90,10 @@ class VisTrackingGraph{
                     .text(i)
                     .attr('id', 'timeText-'+i)
                     .classed('labelText', true)
-                    // .on('click', function(){
-                    //     clickTimestamp(i);
-                    //     fishEyeLayoutHandlerSim(i);
-                    // });
+                    .on('click', ()=>{
+                        that.clickTimestamp(i);
+                        fishEyeLayoutHandler(i);
+                    });
             });
     }
 
@@ -121,9 +122,9 @@ class VisTrackingGraph{
             //         fishEyeLayoutHandler(d);
             //     }
             // })
-            // .on('click', function(_, d){
-            //     highlightNode(d);
-            // });
+            .on('click', function(_, d){
+                highlightNode(d);
+            });
     }
 
     visLinks(){
@@ -143,5 +144,26 @@ class VisTrackingGraph{
             .attr('d', link);
     }
 
-    
+    // change the style after clicking on a node
+    clickTimestamp(timestamp){
+        // 1. restore the style of the timebar
+        this.timeLinesSelection
+            .selectAll('line')
+            .style('stroke-width', null)
+            .style('stroke', null);
+        // 2. restore the style of the text
+        this.timeLinesSelection
+            .selectAll('text')
+            .style("fill", null);
+
+        // 3. highlight the selected timebar
+        d3.select('#timestamp-'+timestamp)
+            .selectAll('line')
+            .style('stroke', 'black')
+            .style('stroke-width', 1.5);
+        // 4. highlight the time text
+        d3.select('#timestamp-'+timestamp)
+            .selectAll('text')
+            .style('fill', 'black');
+    }
 }
