@@ -3,15 +3,16 @@
     <head>
         <title>Pure Tracking Graph</title>
         <link rel="stylesheet" type="text/css" href="static/css/layout.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/decorate.css">
         <script src="/static/js/d3.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <!-- <script src="./js/three.js"></script>
 		<script src="./js/OrbitControls.js"></script> -->
     </head>
     <body>
         <div id="overallDiv">
-            <div id="pureGTDiv">
-                <div id="legendDiv"></div>
-            </div>
+            <div id="pureGTDiv"></div>
+            <div id="legendDiv"></div>
             <div id="threeDPathDiv"></div>
             <div id="timeAnalysisDivBorder">
                 <div id="timeAnalysisDiv">
@@ -24,12 +25,9 @@
             </div>
         </div>
     </body>
-    <!-- <script src="./js/singleScalarField.js"></script>
-    <script src="./js/3dPath.js"></script>
-    <script src="./js/legend.js"></script>
-    <script src="./js/selectNode.js"></script>
-    <script src="./js/fisheye.js"></script>
-    <script src="./js/pureGT.js"></script>
-    <script src="./js/trajectory.js"></script>
-    <script src="./js/index.js"></script> -->
+    <script src="/static/js/INT-THChange.js"></script>
+    <script src="/static/js/init.js"></script>
+    <script src="/static/js/trackingGraph.js"></script>
+    <script src="/static/js/visTrackingGraph.js"></script>
+    <script src="/static/js/visLegend.js"></script>
 </html>
