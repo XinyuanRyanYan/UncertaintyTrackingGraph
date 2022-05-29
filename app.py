@@ -1,5 +1,3 @@
-import re
-from tkinter.tix import Form
 from flask import Flask, render_template, jsonify
 from dataProcessor.utils import load_json_data
 

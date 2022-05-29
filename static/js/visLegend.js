@@ -99,6 +99,7 @@ function Legend(divSelector, {width = 200, height = 10, probRange = [0, 1]} = {}
             d3.select(this).attr('x1', curX).attr('x2', curX);
             controlLineText.attr('x', curX)
                 .text(formularData(pScale(curX-legendPadding.left)));
+            pThreshould = formularData(pScale(curX-legendPadding.left));
         }      
     }
     function dragEnded(event){
@@ -110,6 +111,9 @@ function Legend(divSelector, {width = 200, height = 10, probRange = [0, 1]} = {}
             // change the threshould
             pThreshould = formularData(pScale(curX-legendPadding.left));
             threshChangeReaction();     // dynamically update the appears or disappears of links and nodes
+        }
+        else{ // when drag too much
+            threshChangeReaction();
         }
     }
 
