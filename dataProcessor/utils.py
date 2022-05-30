@@ -106,7 +106,7 @@ def load_json_data(data_name):
     Returns:
         the json data
     '''
-    with open('static/data/'+data_name+'.json', 'r') as f:
+    with open('static/jsonData/'+data_name+'.json', 'r') as f:
         return json.load(f)
 
 # if __name__ == '__main__':
