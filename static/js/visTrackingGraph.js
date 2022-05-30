@@ -8,11 +8,12 @@ class VisTrackingGraph{
         }
         let divWid = parseInt(d3.select('#pureGTDiv').style('width'));
         let divHei = parseInt(d3.select('#pureGTDiv').style('height'));
-        this.dim.wid = trackingGraphObj.timestamps*20 > divWid? trackingGraphObj.timestamps*20:divWid;
-        this.dim.hei = divHei;
+        this.dim.wid = trackingGraphObj.timestamps*26 > divWid? trackingGraphObj.timestamps*26:divWid;
+        this.dim.hei = trackingGraphObj.biggestYId*15 > divHei? trackingGraphObj.biggestYId*15:divHei;
 
         // 2. set the color scale
         this.lineColorScale = '';
+        this.highlightColorScale = '';
         this.initColorScale();
 
         // 3. visualize the svg
@@ -45,6 +46,9 @@ class VisTrackingGraph{
         this.lineColorScale = d3.scaleLinear()
             .domain(trackingGraphObj.pRange)
             .range([startColor, stopColor]);
+        this.highlightColorScale = d3.scaleLinear()
+            .domain(trackingGraphObj.pRange)
+            .range([orangeStartColor, orangeStopColor]);
     }
 
     // init the x, y scale
@@ -91,7 +95,7 @@ class VisTrackingGraph{
                     .attr('id', 'timeText-'+i)
                     .classed('labelText', true)
                     .on('click', ()=>{
-                        that.clickTimestamp(i);
+                        // that.clickTimestamp(i);
                         fishEyeLayoutHandler(i);
                     });
             });
@@ -103,7 +107,7 @@ class VisTrackingGraph{
             .data(trackingGraphObj.nodes)
             .enter()
             .append('circle')
-            .attr('id', d=>'node'+d['id'])
+            .attr('id', d=>'node-'+d['id'])
             .attr('cx', (d)=>this.xScale(d.t))
             .attr('cy', (d)=>this.yScale(d.yId))
             .attr('r', 3)
@@ -123,7 +127,7 @@ class VisTrackingGraph{
             //     }
             // })
             .on('click', function(_, d){
-                highlightNode(d);
+                clickNode(d);
             });
     }
 

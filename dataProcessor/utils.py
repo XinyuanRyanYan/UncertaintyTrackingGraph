@@ -64,7 +64,7 @@ def unify_files_names(data_name):
             treeNode_highlight_001.txt=>treeNode_highlight_1.txt
     """
 
-    path_prefix = '../data/'+data_name
+    path_prefix = '../static/data/'+data_name
 
     # 1. modify the 'treeNode_highlight_001.txt' to 'treeNode_highlight_1.txt'
     path = path_prefix+'/track'

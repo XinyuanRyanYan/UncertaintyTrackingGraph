@@ -10,7 +10,6 @@ return json
 }
 '''
 from os import X_OK, name
-from matplotlib.image import imread
 import numpy as np
 from numpy import PINF, append, mat, matrix, nested_iters, recarray, result_type, timedelta64, unravel_index
 import copy
@@ -20,7 +19,7 @@ from numpy.ma import outer
 import json
 from utils import unify_files_names
 
-PATH_PREFIX = '../data'    # the prefix of the data path
+PATH_PREFIX = '../static/data'    # the prefix of the data path
 
 NODE_FILE_PREFIX = './dataProcessor/Data/track_0_30/treeNode_highlight_0'     # +01.txt
 MAP_FILE_PREFIX = './dataProcessor/Data/track_0_30/oc_'    # +0_1.txt
@@ -295,7 +294,7 @@ class Processor:
 
     # store self.structure into python file
     def store_json_file(self):
-        with open('../data/'+self.data_name+'.json', 'w') as f:
+        with open(PATH_PREFIX+'/'+self.data_name+'.json', 'w') as f:
             json.dump(self.structure, f, indent=4)
     
     # get the yId of the this row
@@ -498,7 +497,7 @@ class Processor:
         print('one node does not been found!')
 
 if __name__ == '__main__':
-    data_name = 'HeatedFlowVelocity'
+    data_name = 'jungtelziemniak'        # HeatedFlowVelocity VortexWithMin IonizationFront jungtelziemniak
 
     # init all of the path
     NODE_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/track/treeNode_highlight_'

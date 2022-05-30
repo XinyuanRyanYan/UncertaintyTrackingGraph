@@ -1,7 +1,15 @@
 /**response to the event of clicking a timestamp*/
 
 function fishEyeLayoutHandler(t){
+    // if this t is already focused, restore the focusnode and fisheye
+    restoreNode();
+    visTrackingGraphObj.clickTimestamp(t);
+    if(t == focusT){
+        restoreFishEye();
+        return;
+    }
     // parameter of fisheye
+    focusT = t;
     let mF = 3;
     let fisheyeT = new Array(trackingGraphObj.timestamps).fill(0);
     fisheye([-0.1, t, trackingGraphObj.timestamps-1+0.1]);
@@ -88,3 +96,64 @@ function fishEyeLayoutHandler(t){
     }
 
 }
+
+function restoreFishEye(){
+    // change the focusT
+    focusT = '';
+
+    // visualize all nodes and links
+    let timeLinesSelection = visTrackingGraphObj.timeLinesSelection;
+    let nodesSelection = visTrackingGraphObj.nodesSelection;
+    let linksSelection = visTrackingGraphObj.linksSelection;
+    let xScale = visTrackingGraphObj.xScale;
+    let yScale = visTrackingGraphObj.yScale;
+
+    // nodes
+    nodesSelection.each(function(d){
+        let t  = d['t'];
+        let x = xScale(t);
+        d3.select(this)
+            .transition()
+            .duration(500)
+            .attr('cx', x);
+    });
+    
+    // links
+    let link = d3.linkHorizontal()
+        .source(function(d) {
+            return [xScale(d['src']['t']), yScale(d.src.yId)];
+        })
+        .target(function(d) {
+            return [xScale(d['tgt']['t']), yScale(d.tgt.yId)];
+        });
+    linksSelection.each(function(){
+        d3.select(this)
+            .transition()
+            .duration(500)
+            .attr('d', link);   
+    });
+
+    // timelines
+    timeLinesSelection.each(function(_, i){
+        let x = xScale(i);
+        d3.select(this).selectAll('line')
+            .transition()
+            .duration(500)
+            .attr('x1', x)
+            .attr('x2', x); 
+        d3.select(this).selectAll('text')
+            .transition()
+            .duration(500)
+            .attr('x', x);
+    });
+
+    // modify the style of timebar and  text
+    timeLinesSelection
+        .selectAll('line')
+        .style('stroke-width', null)
+        .style('stroke', null);
+    timeLinesSelection
+        .selectAll('text')
+        .style("fill", null);
+}
+
