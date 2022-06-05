@@ -9,7 +9,7 @@ def index():
 
 @app.route("/getTGData", methods=['POST'])
 def getTGData():
-    return jsonify(load_json_data('VortexWithMin'))    # VortexWithMin HeatedFlowVelocity IonizationFront jungtelziemniak
+    return jsonify(load_json_data('IonizationFront'))    # VortexWithMin HeatedFlowVelocity IonizationFront jungtelziemniak
 
 if __name__ == '__main__':
    app.run(debug = True)
