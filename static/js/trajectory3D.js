@@ -7,8 +7,8 @@ class Trajectory3D{
         this.divId = divId;
         this.width = parseInt(d3.select(this.divId).style('width'));
         this.height = parseInt(d3.select(this.divId).style('height'));
-        this.rows = 149;    // the number of rows, the node num in this row = rows + 1 (150, 450)
-        this.cols = 449;
+        this.rows = 599;    // the number of rows, the node num in this row = rows + 1 (150, 450)
+        this.cols = 247;
         this.camera = '';
         this.scene = '';
         this.renderer = '';
@@ -115,7 +115,7 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
  * z: the translation in the z direction
  */
 Trajectory3D.prototype.addSF = function(scalarField, z){
-    let geometry = new THREE.PlaneBufferGeometry( 3, 1, this.cols, this.rows ).translate(0, 0, z).rotateX(Math.PI/2+Math.PI);
+    let geometry = new THREE.PlaneBufferGeometry( 1, 2.419, this.cols, this.rows ).translate(0, 0, z).rotateX(Math.PI/2+Math.PI);
     let position = geometry.attributes.position;
     let colors = [];
 
@@ -202,7 +202,8 @@ Trajectory3D.prototype.renderFeatures = function(t, z){
         let row = node['r'], col = node['c'];
         
         // generate this circle
-        let geometry = new THREE.CircleGeometry( 0.02, 32 ).translate(col*3/this.cols-1.5, -(row*1/this.rows-0.5),z).rotateX(Math.PI/2+Math.PI);
+        let w = 1, h = 2.419;
+        let geometry = new THREE.CircleGeometry( 0.02, 32 ).translate(col*w/this.cols-w/2, -(row*h/this.rows-h/2),z).rotateX(Math.PI/2+Math.PI);
         const material = new THREE.MeshBasicMaterial( { color: 'orange' } );
         const circle = new THREE.Mesh( geometry, material );
 

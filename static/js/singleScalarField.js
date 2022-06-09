@@ -63,7 +63,7 @@ SingleSF.prototype.renderSF = function(scalarField, t){
     this.scene.clear();
     this.renderer.clear();
 
-    const geometry = new THREE.PlaneBufferGeometry( 3, 1, this.cols, this.rows );
+    const geometry = new THREE.PlaneBufferGeometry( 1, 2.419, this.cols, this.rows ).rotateZ(-Math.PI/2);
     const position = geometry.attributes.position;
     const colors = [];
 
@@ -103,9 +103,12 @@ SingleSF.prototype.renderFeatures = function(t){
         let node_index = node_ids[i]; 
         let node = trackingGraphObj.nodes[node_index];
         let row = node['r'], col = node['c'];
+
+        console.log('row', row, 'col', col);
         
         // generate this circle
-        let geometry = new THREE.CircleGeometry( 0.01, 32 ).translate(col*3/this.cols-1.5, -(row*1/this.rows-0.5), 0);
+        let w = 1, h = 2.419;
+        let geometry = new THREE.CircleGeometry( 0.01, 32 ).translate(col*w/this.cols-w/2, -(row*h/this.rows-h/2), 0).rotateZ(-Math.PI/2);;
         const material = new THREE.MeshBasicMaterial( { color: 'orange' } );
         const circle = new THREE.Mesh( geometry, material );
 

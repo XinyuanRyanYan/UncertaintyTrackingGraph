@@ -2,6 +2,7 @@ from http.client import ImproperConnectionState
 import os
 import re
 import json
+import numpy as np
 
 
 def modify_file_names(path, name_lst, prefix):
@@ -121,5 +122,46 @@ def load_SF_data(data_name, t):
                 scalar_field.append(line)
     return scalar_field
 
-# if __name__ == '__main__':
-#     unify_files_names('HeatedFlowVelocity') 
+def transpose_data(data_name, t):
+    '''
+    transpose the scalar fields
+        1. transpose the scalar fields matrix
+        2. rename xlist_1.txt as zlist_1
+        3. rename ylist_1.txt as xlist_1
+        3. rename zlist_1.txt as ylist_1
+    '''
+    path_prefix = '../static/data/'+data_name+'/matrix'
+    
+    # 1. transpose the matrix
+    for i in range(t):
+        file_name = path_prefix+'/data_'+str(i)+'.txt'
+        mtx = np.loadtxt(file_name)
+        mtx = np.transpose(mtx)
+        np.savetxt(file_name, mtx, delimiter=' ')
+    
+    # rename xlist_1.txt as zlist_1， ylist_1.txt as xlist_1
+    x_file_lst = []
+    y_file_lst = []
+
+    for file_name in os.listdir(path_prefix):
+        if 'txt' in file_name:
+            if 'xlist' in file_name:
+                x_file_lst.append(file_name)
+            elif 'ylist' in file_name:
+                y_file_lst.append(file_name)
+
+    modify_file_names(path_prefix, x_file_lst, 'zlist')
+    modify_file_names(path_prefix, y_file_lst, 'xlist')
+
+    # zlist_1.txt as ylist_1
+    z_file_lst = []
+    for file_name in os.listdir(path_prefix):
+        if 'txt' in file_name:
+            if 'zlist' in file_name:
+                z_file_lst.append(file_name)
+    modify_file_names(path_prefix, z_file_lst, 'ylist')
+
+
+if __name__ == '__main__':
+    # unify_files_names('HeatedFlowVelocity') 
+    transpose_data('IonizationFront', 123)

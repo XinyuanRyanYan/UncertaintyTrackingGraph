@@ -17,7 +17,7 @@ from numpy.core.fromnumeric import reshape, shape
 from numpy.core.numerictypes import find_common_type
 from numpy.ma import outer
 import json
-from utils import unify_files_names
+from utils import unify_files_names, transpose_data
 
 PATH_PREFIX = '../static/data'    # the prefix of the data path
 
@@ -85,17 +85,23 @@ class Processor:
     # transform all scalarfields
     def init_scalar_fields(self):
         scalar_fields = []
-        for i in range(self.timestamps):
-            scalar_field = []
-            file_name = MATRIX_FILE_PREFIX+str(i)+'.txt'
+        # only need to give the dimension
+        mtx = np.loadtxt(PATH_PREFIX+'/'+self.data_name+'/matrix/data_0.txt')
+        mtx_row, mtx_col = mtx.shape
+        self.structure['scalarFields'] = [mtx_row, mtx_col]
+
+        # for i in range(self.timestamps):
+        #     scalar_field = []
+        #     file_name = MATRIX_FILE_PREFIX+str(i)+'.txt'
             
-            with open(file_name, 'r') as f:
-                for line in f.readlines():
-                    if line:
-                        line = [float(x) for x in line.strip().split()]
-                        scalar_field.append(line)
+        #     with open(file_name, 'r') as f:
+        #         for line in f.readlines():
+        #             if line:
+        #                 line = [float(x) for x in line.strip().split()]
+        #                 scalar_field.append(line)
             
-            scalar_fields.append(scalar_field)
+        #     scalar_fields.append(scalar_field)
+
         # print('row', len(scalar_fields))
         # print('col', len(scalar_fields[0][0]))
         
@@ -506,12 +512,18 @@ if __name__ == '__main__':
     X_MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/xlist_' 
     Y_MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/ylist_'
 
-    # t = unify_files_names(data_name)
+    # modify the name of file
+    t = unify_files_names(data_name)
 
-    # processor = Processor(data_name, t)
-    # processor.store_json_file()
+    # check the dimesion of data, init the scalarFields = [num of row, num of col], and transpose if applicable
+    # mtx = np.loadtxt(PATH_PREFIX+'/'+data_name+'/matrix/data_0.txt')
+    # mtx_row, mtx_col = mtx.shape
+    # if mtx_row > mtx_col:
+    #     transpose_data(data_name, t)
 
-    mtx = np.loadtxt(PATH_PREFIX+'/'+data_name+'/matrix/data_0.txt')
-    print(mtx.shape)
-    # print(mtx.shape)
-    # print(mtx.max())
+    processor = Processor(data_name, t)
+    processor.store_json_file()
+
+    # mtx = np.loadtxt(PATH_PREFIX+'/'+data_name+'/matrix/data_0.txt')
+    # row, col = mtx.shape
+    # print(row, col)
