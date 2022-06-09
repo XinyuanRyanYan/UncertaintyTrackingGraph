@@ -96,6 +96,7 @@ class VisTrackingGraph{
                     .classed('labelText', true)
                     .on('click', ()=>{
                         // that.clickTimestamp(i);
+                        visScalarFields(i);
                         fishEyeLayoutHandler(i);
                     });
             });

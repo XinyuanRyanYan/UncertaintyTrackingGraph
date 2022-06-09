@@ -7,6 +7,7 @@ function clickNode(nodeD){
     // 1. if node is focused, then restore
     if(id == focusNode){
         restoreNode();
+        // restore the 2d scalar fields and the 3D scalar fields
         return;
     }
     // 2. else
@@ -18,12 +19,16 @@ function clickNode(nodeD){
             restoreNode();
             fishEyeLayoutHandler(t);
             focusT = t;
+            // vis scalar fields
+            visScalarFields(t);
         }
     }
     else{
         if(focusT == ''){
             fishEyeLayoutHandler(t);
             focusT = t;
+            // vis scalar fields
+            visScalarFields(t);
         }
     }
 
@@ -36,8 +41,58 @@ function clickNode(nodeD){
     highlightNodes.push(nodeD);     // curNode + parents + children
     highlightLinks = parentData[1].concat(childData[1]);
    
-    // 4. highlight thses nodes and links
+    // 4. highlight these nodes and links
     styleNodesLinks();
+
+    // 5. hightlight the nodes in the five scalar fields
+    higlightNodesSSF(nodeD);
+
+    // 6. highlight the nodes and path in the scalar feilds
+    trajectorySF.highlightPath(nodeD);
+}
+
+function higlightNodesSSF(node){
+    /**
+     * highlight features of the five scalar fields 
+     */
+    singleSFMiddle.highlightFeatures([node]);
+
+    // highight the parents and children of this feature
+    let pNodes = [];
+    let cNodes = [];
+    let ppNodes = [];
+    let ccNodes = [];
+
+    for(let i = 0; i < node['parents'].length; i++){
+        pNodes.push(node['parents'][i]['node'])
+    }
+    for(let i = 0; i < node['children'].length; i++){
+        cNodes.push(node['children'][i]['node'])
+    }
+    for(let i = 0; i < pNodes.length; i++){
+        let curNode = pNodes[i];
+        for(let j = 0; j < curNode['parents'].length; j++){
+            ppNodes.push(curNode['parents'][j]['node'])
+        }
+    }
+    for(let i = 0; i < cNodes.length; i++){
+        let curNode = cNodes[i];
+        for(let j = 0; j < curNode['children'].length; j++){
+            ccNodes.push(curNode['children'][j]['node'])
+        }
+    }
+    if(pNodes.length != 0){
+        singleSFLeft.highlightFeatures(pNodes);
+    }
+    if(cNodes.length != 0){
+        singleSFRight.highlightFeatures(cNodes);
+    }
+    if(ppNodes.length != 0){
+        singleSFLeftL.highlightFeatures(ppNodes);
+    }
+    if(ccNodes.length != 0){
+        singleSFRightR.highlightFeatures(ccNodes);
+    }
 }
 
 function styleNodesLinks(highlight = true){
@@ -65,11 +120,19 @@ function restoreNode(){
     /** 
      * 1. restore the highlighted node/link
      * 2. set the focus node to be null
+     * 3. clear the 2D and 3D scalar fields
      */
     styleNodesLinks(false);
     focusNode = '';
     highlightNodes = [];
     highlightLinks = [];
+    trajectorySF.restorePath(1);
+
+    singleSFLeftL.restore();
+    singleSFLeft.restore();
+    singleSFMiddle.restore();
+    singleSFRight.restore();
+    singleSFRightR.restore();
 }
 
 function getPorCInfo(node, drt, dis=10000000){

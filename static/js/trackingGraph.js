@@ -27,7 +27,7 @@ class TrackingGraph{
         this.links = this.initLinks(TGData.nodes, TGData.links);
         this.timestamps = TGData.timestamps;
         this.biggestYId = TGData.mostFeatures;
-        this.nodesPerT = TGData.featureDis;
+        this.nodesPerT = TGData.nodesPerT;
         this.pRange = TGData.pRange;
     }
 

@@ -77,8 +77,8 @@ class Processor:
                 col = self.find_location(y, y_indice)
 
                 # implement the node attributes
-                self.structure['nodes'][cnt]['row'] = row
-                self.structure['nodes'][cnt]['col'] = col
+                self.structure['nodes'][cnt]['r'] = row
+                self.structure['nodes'][cnt]['c'] = col
 
                 cnt += 1
     
@@ -491,13 +491,13 @@ class Processor:
     def find_location(self, x, lst):
         index = 0
         for ele in lst:
-            if abs(ele-x) < 1e-5:
+            if abs(ele-x) < 1e-3:
                 return index
             index += 1
         print('one node does not been found!')
 
 if __name__ == '__main__':
-    data_name = 'jungtelziemniak'        # HeatedFlowVelocity VortexWithMin IonizationFront jungtelziemniak
+    data_name = 'IonizationFront'        # HeatedFlowVelocity VortexWithMin IonizationFront jungtelziemniak
 
     # init all of the path
     NODE_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/track/treeNode_highlight_'
@@ -506,7 +506,12 @@ if __name__ == '__main__':
     X_MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/xlist_' 
     Y_MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/ylist_'
 
-    t = unify_files_names(data_name)
+    # t = unify_files_names(data_name)
 
-    processor = Processor(data_name, t)
-    processor.store_json_file()
+    # processor = Processor(data_name, t)
+    # processor.store_json_file()
+
+    mtx = np.loadtxt(PATH_PREFIX+'/'+data_name+'/matrix/data_0.txt')
+    print(mtx.shape)
+    # print(mtx.shape)
+    # print(mtx.max())

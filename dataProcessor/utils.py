@@ -109,5 +109,17 @@ def load_json_data(data_name):
     with open('static/jsonData/'+data_name+'.json', 'r') as f:
         return json.load(f)
 
+def load_SF_data(data_name, t):
+    '''
+    load the scalar filed of the 'data_name' at timestamp t
+    '''
+    scalar_field = []
+    with open('static/data/'+data_name+'/matrix/data_' + str(t)+'.txt', 'r') as f:
+        for line in f.readlines():
+            if line:
+                line = [float(x) for x in line.strip().split()]
+                scalar_field.append(line)
+    return scalar_field
+
 # if __name__ == '__main__':
 #     unify_files_names('HeatedFlowVelocity') 
