@@ -159,24 +159,28 @@ class VisTrackingGraph{
         // 2. restore the style of the text
         this.timeLinesSelection
             .selectAll('text')
-            .style("fill", null);
+            .style("fill", null)
+            .style('font-size', null)
+            .style('font-weight', null);
         
         let HLt = (t, color)=>{
             // 3. highlight the selected timebar
             d3.select('#timestamp-'+t)
                 .selectAll('line')
-                .style('stroke', 'black')
-                .style('stroke-width', 1.5);
+                .style('stroke', color)
+                .style('stroke-width', 2);
             // 4. highlight the time text
             d3.select('#timestamp-'+t) 
                 .selectAll('text')
-                .style('fill', 'black');
+                .style('fill', color)
+                .style('font-size', '15px')
+                .style('font-weight', 800);
         }
         // highliht the focus t, and previous and following two timestamps
-        HLt(timestamp, 'black');
-        HLt(timestamp+1, 'black');
-        HLt(timestamp+2, 'black');
-        HLt(timestamp-1, 'black');
-        HLt(timestamp-2, 'black');
+        HLt(timestamp, '#980100'); // CC4125 DC7E6B
+        HLt(timestamp+1, '#DC7E6B');
+        HLt(timestamp+2, '#DC7E6B');
+        HLt(timestamp-1, '#E6B8AF');
+        HLt(timestamp-2, '#E6B8AF');
     }
 }
