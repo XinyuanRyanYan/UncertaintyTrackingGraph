@@ -44,7 +44,7 @@ SingleSF.prototype.init = function(){
     this.camera.position.z = 1.15;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( '#CCCCCC' );
+    this.scene.background = new THREE.Color( '#515770' );
 
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
     this.renderer.setSize( this.width, this.height );

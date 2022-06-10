@@ -40,7 +40,7 @@ Trajectory3D.prototype.animate = function(){
     this.camera.position.z = 3.5;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( '#888888' );
+    this.scene.background = new THREE.Color( '#515770' );
 
     this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
     this.renderer.setSize( this.width, this.height );

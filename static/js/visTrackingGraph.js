@@ -178,9 +178,9 @@ class VisTrackingGraph{
         }
         // highliht the focus t, and previous and following two timestamps
         HLt(timestamp, '#980100'); // CC4125 DC7E6B
-        HLt(timestamp+1, '#DC7E6B');
-        HLt(timestamp+2, '#DC7E6B');
-        HLt(timestamp-1, '#E6B8AF');
-        HLt(timestamp-2, '#E6B8AF');
+        HLt(timestamp+1, '#A4C2F4');
+        HLt(timestamp+2, '#A4C2F4');
+        HLt(timestamp-1, '#F9CB9C');
+        HLt(timestamp-2, '#F9CB9C');
     }
 }
