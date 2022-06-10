@@ -160,15 +160,23 @@ class VisTrackingGraph{
         this.timeLinesSelection
             .selectAll('text')
             .style("fill", null);
-
-        // 3. highlight the selected timebar
-        d3.select('#timestamp-'+timestamp)
-            .selectAll('line')
-            .style('stroke', 'black')
-            .style('stroke-width', 1.5);
-        // 4. highlight the time text
-        d3.select('#timestamp-'+timestamp)
-            .selectAll('text')
-            .style('fill', 'black');
+        
+        let HLt = (t, color)=>{
+            // 3. highlight the selected timebar
+            d3.select('#timestamp-'+t)
+                .selectAll('line')
+                .style('stroke', 'black')
+                .style('stroke-width', 1.5);
+            // 4. highlight the time text
+            d3.select('#timestamp-'+t) 
+                .selectAll('text')
+                .style('fill', 'black');
+        }
+        // highliht the focus t, and previous and following two timestamps
+        HLt(timestamp, 'black');
+        HLt(timestamp+1, 'black');
+        HLt(timestamp+2, 'black');
+        HLt(timestamp-1, 'black');
+        HLt(timestamp-2, 'black');
     }
 }
