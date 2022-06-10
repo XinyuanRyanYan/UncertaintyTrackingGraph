@@ -7,8 +7,7 @@ class Trajectory3D{
         this.divId = divId;
         this.width = parseInt(d3.select(this.divId).style('width'));
         this.height = parseInt(d3.select(this.divId).style('height'));
-        this.rows = 599;    // the number of rows, the node num in this row = rows + 1 (150, 450)
-        this.cols = 247;
+    
         this.camera = '';
         this.scene = '';
         this.renderer = '';
@@ -115,13 +114,15 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
  * z: the translation in the z direction
  */
 Trajectory3D.prototype.addSF = function(scalarField, z){
-    let geometry = new THREE.PlaneBufferGeometry( 1, 2.419, this.cols, this.rows ).translate(0, 0, z).rotateX(Math.PI/2+Math.PI);
+    let geometry = new THREE.PlaneBufferGeometry( SFAttr.w, SFAttr.h, SFAttr.cols, SFAttr.rows ).translate(0, 0, z)
+        .rotateX(Math.PI/2+Math.PI)
+        .rotateY(SFAttr.rotateAngle);
     let position = geometry.attributes.position;
     let colors = [];
 
     for ( let i = 0; i < position.count; i ++ ) {
         // find the value at this point in matrix
-        let row = parseInt(i/(this.cols+1)), col = i%(this.cols+1);
+        let row = parseInt(i/(SFAttr.cols+1)), col = i%(SFAttr.cols+1);
         let value = scalarField[row][col];
         // convert this value into the color
         let d3Color = scalarFieldColorScale(value);
@@ -147,7 +148,7 @@ Trajectory3D.prototype.renderLines = function(t, z1, z2){
     // for each node find its parentnode and link
     for(let i = 0; i < nodeIds.length; i++){
         let node = trackingGraphObj.nodes[nodeIds[i]];
-        let nodeX = node['c']*3/this.cols-1.5, nodeY = -(node['r']*1/this.rows-0.5);
+        let nodeX = node['c']*SFAttr.w/SFAttr.cols-SFAttr.w/2, nodeY = -(node['r']*SFAttr.h/SFAttr.rows-SFAttr.h/2);
     
         // find all parents node
         let parents = node['children'];
@@ -157,7 +158,7 @@ Trajectory3D.prototype.renderLines = function(t, z1, z2){
             let parentNode = parent['node'];
             let pro = parent['p'];
             let linkId = parent['link']['id'];
-            let pNodeX = parentNode['c']*3/this.cols-1.5, pNodeY = -(parentNode['r']*1/this.rows-0.5);
+            let pNodeX = parentNode['c']*SFAttr.w/SFAttr.cols-SFAttr.w/2, pNodeY = -(parentNode['r']*SFAttr.h/SFAttr.rows-SFAttr.h/2);
             this.addLine([nodeX, nodeY, z1], [pNodeX, pNodeY, z2], pro, linkId);
         }
 
@@ -178,7 +179,9 @@ Trajectory3D.prototype.addLine = function(pos1, pos2, pro, linkId){
     let points = [];
     points.push( new THREE.Vector3( pos1[0], pos1[1], pos1[2] ) );
     points.push( new THREE.Vector3( pos2[0], pos2[1], pos2[2] ) );
-    let geometryLine = new THREE.BufferGeometry().setFromPoints( points ).rotateX(Math.PI/2+Math.PI);
+    let geometryLine = new THREE.BufferGeometry().setFromPoints( points )
+        .rotateX(Math.PI/2+Math.PI)
+        .rotateY(SFAttr.rotateAngle);
 
     // get the color of this line
     let color = visTrackingGraphObj.lineColorScale(pro);
@@ -202,8 +205,10 @@ Trajectory3D.prototype.renderFeatures = function(t, z){
         let row = node['r'], col = node['c'];
         
         // generate this circle
-        let w = 1, h = 2.419;
-        let geometry = new THREE.CircleGeometry( 0.02, 32 ).translate(col*w/this.cols-w/2, -(row*h/this.rows-h/2),z).rotateX(Math.PI/2+Math.PI);
+        let geometry = new THREE.CircleGeometry( 0.02, 32 )
+            .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2),z)
+            .rotateX(Math.PI/2+Math.PI)
+            .rotateY(SFAttr.rotateAngle);
         const material = new THREE.MeshBasicMaterial( { color: 'orange' } );
         const circle = new THREE.Mesh( geometry, material );
 

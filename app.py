@@ -10,7 +10,7 @@ def index():
 
 @app.route("/getTGData", methods=['POST'])
 def getTGData():
-    return jsonify(load_json_data('IonizationFront'))    # VortexWithMin HeatedFlowVelocity IonizationFront jungtelziemniak
+    return jsonify(load_json_data('jungtelziemniak'))    # VortexWithMin HeatedFlowVelocity IonizationFront jungtelziemniak
 
 @app.route("/getScalarFields", methods=['POST'])
 def getScalarFields():
@@ -24,7 +24,7 @@ def getScalarFields():
     paras = request.get_json()
     print('paras', paras)
     for key in paras:
-        paras[key] = -1 if paras[key] == -1 else load_SF_data('IonizationFront', paras[key])
+        paras[key] = -1 if paras[key] == -1 else load_SF_data('jungtelziemniak', paras[key])
     return jsonify(paras)
 
 

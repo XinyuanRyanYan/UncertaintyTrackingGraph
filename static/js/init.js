@@ -25,18 +25,21 @@ let focusNode = '';
 let highlightNodes = [];    // the node id list of highlighted nodes
 let highlightLinks = [];    // the link id list of highlighted links
 
+// the attrs of scalar fields
+let SFAttr = {rows: '', cols: '', rotateAngle: '', h: '', w: ''};
+
 // color map for the scalar fields
 // let scalarFieldColorScale = d3.scaleSequential([-0.05, 0.8], d3.interpolateGnBu); 
 let scalarFieldColorScale = d3.scaleSequential([8000, 0], d3.interpolateGnBu); 
 
 // five scalar fields
-let singleSFMiddle = new SingleSF('#SFT');
-let singleSFLeft = new SingleSF('#SFLastT');
-let singleSFRight = new SingleSF('#SFNextT');
-let singleSFLeftL = new SingleSF('#SFLastTT');
-let singleSFRightR = new SingleSF('#SFNextTT');
+let singleSFMiddle = '';
+let singleSFLeft = '';
+let singleSFRight = '';
+let singleSFLeftL = '';
+let singleSFRightR = '';
 // 3D scalar fields
-let trajectorySF = new Trajectory3D('#threeDPathDiv');
+let trajectorySF = '';
 
 // 1. get the Json file of tracking graph
 axios.post('/getTGData', {
@@ -46,13 +49,51 @@ axios.post('/getTGData', {
         let TGData = result['data'];
         trackingGraphObj = new TrackingGraph(TGData);
         visTrackingGraphObj = new VisTrackingGraph();
-        // console.log(visTrackingGraphObj);
+        initSFAttr();
+        initSF();
         lineColorScale = d3.scaleLinear()
             .domain(trackingGraphObj.pRange)
             .range([startColor, stopColor]);
+        scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
     }).catch((err) => {
         console.log(err);
     });
+
+
+function initSFAttr(){
+    SFAttr.rows = trackingGraphObj.SFDim[0]-1;    // the number of rows, the node num in this row = rows + 1   (150, 450) (600, 248)
+    SFAttr.cols = trackingGraphObj.SFDim[1]-1;
+    // when row > col, rotation is needec
+    SFAttr.rotateAngle = SFAttr.rows>SFAttr.cols? -Math.PI/2 : 0;
+    SFAttr.h = 1.2;  // the width and height of the scalar fields in this scalar fields
+    SFAttr.w = (d3.max([SFAttr.rows+1, SFAttr.cols+1])/d3.min([SFAttr.rows+1, SFAttr.cols+1]))*SFAttr.h; 
+    if(SFAttr.rows>SFAttr.cols){
+        let temp = SFAttr.h;
+        SFAttr.h = SFAttr.w;
+        SFAttr.w = temp;
+    }
+    console.log(SFAttr);
+}
+
+function initSF(){
+    /**
+     * reset the width of time div
+     * init the 2d and 3d Saclar fields
+     */
+    let height = parseInt(d3.select('#timeAnalysisDiv').style('height'));
+    let width = SFAttr.w / SFAttr.h > 1?  height * SFAttr.w / SFAttr.h*5 : height * SFAttr.h / SFAttr.w*5 
+    console.log(width);
+    d3.select('#timeAnalysisDiv').style('width', width+'px');
+
+    // five scalar fields
+    singleSFMiddle = new SingleSF('#SFT');
+    singleSFLeft = new SingleSF('#SFLastT');
+    singleSFRight = new SingleSF('#SFNextT');
+    singleSFLeftL = new SingleSF('#SFLastTT');
+    singleSFRightR = new SingleSF('#SFNextTT');
+    // 3D scalar fields
+    trajectorySF = new Trajectory3D('#threeDPathDiv');
+}
 
 function visScalarFields(t){
     /**

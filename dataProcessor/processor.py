@@ -10,6 +10,7 @@ return json
 }
 '''
 from os import X_OK, name
+from matplotlib.pyplot import sca
 import numpy as np
 from numpy import PINF, append, mat, matrix, nested_iters, recarray, result_type, timedelta64, unravel_index
 import copy
@@ -35,7 +36,7 @@ class Processor:
         '''
         self.data_name = data_name
         self.timestamps = t
-        self.structure = {'nodes': [], 'links': [], 'timestamps': self.timestamps, 'mostFeatures': 0, 'nodesPerT': [], 'pRange': [], 'scalarFields': []}
+        self.structure = {'nodes': [], 'links': [], 'timestamps': self.timestamps, 'mostFeatures': 0, 'nodesPerT': [], 'pRange': [], 'scalarFields': [], 'SFRange': []}
         self.start_index = 0
         self.link_index = 0
 
@@ -89,6 +90,16 @@ class Processor:
         mtx = np.loadtxt(PATH_PREFIX+'/'+self.data_name+'/matrix/data_0.txt')
         mtx_row, mtx_col = mtx.shape
         self.structure['scalarFields'] = [mtx_row, mtx_col]
+
+        # set the range of scalar field values
+        scalar_fields_vals = []
+        for i in range(self.timestamps):
+            file_name = MATRIX_FILE_PREFIX+str(i)+'.txt'
+            mtx = np.loadtxt(file_name)
+            scalar_fields_vals.append(mtx.min())
+            scalar_fields_vals.append(mtx.max())
+        
+        self.structure['SFRange'] = [min(scalar_fields_vals), max(scalar_fields_vals)] 
 
         # for i in range(self.timestamps):
         #     scalar_field = []
@@ -503,7 +514,7 @@ class Processor:
         print('one node does not been found!')
 
 if __name__ == '__main__':
-    data_name = 'IonizationFront'        # HeatedFlowVelocity VortexWithMin IonizationFront jungtelziemniak
+    data_name = 'jungtelziemniak'        # HeatedFlowVelocity VortexWithMin IonizationFront jungtelziemniak
 
     # init all of the path
     NODE_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/track/treeNode_highlight_'

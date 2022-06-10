@@ -12,14 +12,14 @@ class SingleSF {
         this.divId = divId;
         this.width = parseInt(d3.select(this.divId).style('width'));
         this.height = parseInt(d3.select(this.divId).style('height'));
-        this.rows = 599;    // the number of rows, the node num in this row = rows + 1   (150, 450) (600, 248)
-        this.cols = 247;
+
         this.camera = '';
         this.scene = '';
         this.renderer = '';
         this.controls = '';
         this.features = {};     // all features at this timestamp {'index': node geometry}
         this.highlightFeatureIndex = '';     // the feature id
+
         this.init();
         // this.controls = new OrbitControls( this.camera, this.renderer.domElement);
         this.renderer.render( this.scene, this.camera );
@@ -52,6 +52,7 @@ SingleSF.prototype.init = function(){
     d3.select(this.divId).node().appendChild( this.renderer.domElement);
 }
 
+
 /**
  * render the scalar field
  */
@@ -62,14 +63,16 @@ SingleSF.prototype.renderSF = function(scalarField, t){
     // first remove previous scalarfield
     this.scene.clear();
     this.renderer.clear();
+    this.animate();
 
-    const geometry = new THREE.PlaneBufferGeometry( 1, 2.419, this.cols, this.rows ).rotateZ(-Math.PI/2);
+    const geometry = new THREE.PlaneBufferGeometry( SFAttr.w, SFAttr.h, SFAttr.cols, SFAttr.rows ).rotateZ(SFAttr.rotateAngle);
     const position = geometry.attributes.position;
     const colors = [];
 
     for ( let i = 0; i < position.count; i ++ ) {
         // find the value at this point in matrix
-        let row = parseInt(i/(this.cols+1)), col = i%(this.cols+1);
+        let row = parseInt(i/(SFAttr.cols+1)), col = i%(SFAttr.cols+1);
+        // console.log('row', row, 'col', col);
         let value = scalarField[row][col];
         // convert this value into the color
         let d3Color = scalarFieldColorScale(value);
@@ -103,12 +106,11 @@ SingleSF.prototype.renderFeatures = function(t){
         let node_index = node_ids[i]; 
         let node = trackingGraphObj.nodes[node_index];
         let row = node['r'], col = node['c'];
-
-        console.log('row', row, 'col', col);
         
         // generate this circle
-        let w = 1, h = 2.419;
-        let geometry = new THREE.CircleGeometry( 0.01, 32 ).translate(col*w/this.cols-w/2, -(row*h/this.rows-h/2), 0).rotateZ(-Math.PI/2);;
+        let geometry = new THREE.CircleGeometry( 0.01, 32 )             
+            .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
+            .rotateZ(SFAttr.rotateAngle);
         const material = new THREE.MeshBasicMaterial( { color: 'orange' } );
         const circle = new THREE.Mesh( geometry, material );
 
@@ -126,11 +128,13 @@ SingleSF.prototype.renderFeatures = function(t){
  * @param {*} node
  */
 SingleSF.prototype.highlightFeatures = function(nodeLst){
-    // restore the prrevious one
+    // restore the previous one
     for(key in this.features){
         let curNode = trackingGraphObj.nodes[key];
         let row = curNode['r'], col = curNode['c'];
-        this.features[key].geometry = new THREE.CircleGeometry( 0.01, 32 ).translate(col*3/this.cols-1.5, -(row*1/this.rows-0.5), 0);
+        this.features[key].geometry = new THREE.CircleGeometry( 0.01, 32 )
+            .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
+            .rotateZ(SFAttr.rotateAngle);
         this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
     }
     
@@ -138,7 +142,9 @@ SingleSF.prototype.highlightFeatures = function(nodeLst){
         let node = nodeLst[i];
         let index = node['id']+'';
         let row = node['r'], col = node['c'];
-        this.features[index].geometry = new THREE.CircleGeometry( 0.02, 32 ).translate(col*3/this.cols-1.5, -(row*1/this.rows-0.5), 0);
+        this.features[index].geometry = new THREE.CircleGeometry( 0.02, 32 )
+            .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
+            .rotateZ(SFAttr.rotateAngle);
         this.features[index].material = new THREE.MeshBasicMaterial( { color:  'red'} );
     }
     
@@ -149,7 +155,9 @@ SingleSF.prototype.restore = function(){
     for(key in this.features){
         let curNode = trackingGraphObj.nodes[key];
         let row = curNode['r'], col = curNode['c'];
-        this.features[key].geometry = new THREE.CircleGeometry( 0.01, 32 ).translate(col*3/this.cols-1.5, -(row*1/this.rows-0.5), 0);
+        this.features[key].geometry = new THREE.CircleGeometry( 0.01, 32 )
+            .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
+            .rotateZ(this.rotateAngle);
         this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
     }
 }

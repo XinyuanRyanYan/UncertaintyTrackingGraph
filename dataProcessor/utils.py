@@ -132,12 +132,12 @@ def transpose_data(data_name, t):
     '''
     path_prefix = '../static/data/'+data_name+'/matrix'
     
-    # 1. transpose the matrix
-    for i in range(t):
-        file_name = path_prefix+'/data_'+str(i)+'.txt'
-        mtx = np.loadtxt(file_name)
-        mtx = np.transpose(mtx)
-        np.savetxt(file_name, mtx, delimiter=' ')
+    # # 1. transpose the matrix
+    # for i in range(t):
+    #     file_name = path_prefix+'/data_'+str(i)+'.txt'
+    #     mtx = np.loadtxt(file_name)
+    #     mtx = np.transpose(mtx)
+    #     np.savetxt(file_name, mtx, delimiter=' ')
     
     # rename xlist_1.txt as zlist_1， ylist_1.txt as xlist_1
     x_file_lst = []

@@ -29,6 +29,7 @@ class TrackingGraph{
         this.biggestYId = TGData.mostFeatures;
         this.nodesPerT = TGData.nodesPerT;
         this.pRange = TGData.pRange;
+        this.SFDim = TGData.scalarFields;
     }
 
     /**
