@@ -41,23 +41,23 @@ let singleSFRightR = '';
 // 3D scalar fields
 let trajectorySF = '';
 
-// 1. get the Json file of tracking graph
-axios.post('/getTGData', {
-    type: 'name'
-    })
-    .then((result) => {
-        let TGData = result['data'];
-        trackingGraphObj = new TrackingGraph(TGData);
-        visTrackingGraphObj = new VisTrackingGraph();
-        initSFAttr();
-        initSF();
-        lineColorScale = d3.scaleLinear()
-            .domain(trackingGraphObj.pRange)
-            .range([startColor, stopColor]);
-        scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
-    }).catch((err) => {
-        console.log(err);
-    });
+// // 1. get the Json file of tracking graph
+// axios.post('/getTGData', {
+//     type: 'name'
+//     })
+//     .then((result) => {
+//         let TGData = result['data'];
+//         trackingGraphObj = new TrackingGraph(TGData);
+//         visTrackingGraphObj = new VisTrackingGraph();
+//         initSFAttr();
+//         initSF();
+//         lineColorScale = d3.scaleLinear()
+//             .domain(trackingGraphObj.pRange)
+//             .range([startColor, stopColor]);
+//         scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+//     }).catch((err) => {
+//         console.log(err);
+//     });
 
 
 function initSFAttr(){
@@ -120,11 +120,11 @@ function visScalarFields(t){
     axios.post('/getScalarFields', getTDict(t))
         .then((result) => {
             let scalarFields = result['data'];
-            singleSFMiddle.renderSF(scalarFields['LL-SF'], t);
-            singleSFLeft.renderSF(scalarFields['L-SF'], t-1);
-            singleSFRight.renderSF(scalarFields['SF'], t+1);
-            singleSFLeftL.renderSF(scalarFields['SF-R'], t-2);
-            singleSFRightR.renderSF(scalarFields['SF-RR'], t+2);
+            singleSFLeftL.renderSF(scalarFields['LL-SF'], t-2, 0xF9CB9C); 
+            singleSFLeft.renderSF(scalarFields['L-SF'], t-1, 0xF9CB9C);
+            singleSFMiddle.renderSF(scalarFields['SF'], t, 0x980100); 
+            singleSFRight.renderSF(scalarFields['SF-R'], t+1, 0xA4C2F4); 
+            singleSFRightR.renderSF(scalarFields['SF-RR'], t+2, 0xA4C2F4);
             trajectorySF.rendering(scalarFields, t);
         })
         .catch((err)=>{

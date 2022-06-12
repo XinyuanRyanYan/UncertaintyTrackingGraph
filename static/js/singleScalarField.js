@@ -56,7 +56,7 @@ SingleSF.prototype.init = function(){
 /**
  * render the scalar field
  */
-SingleSF.prototype.renderSF = function(scalarField, t){
+SingleSF.prototype.renderSF = function(scalarField, t, color){
     if(scalarField == -1){
         return;
     }
@@ -86,9 +86,33 @@ SingleSF.prototype.renderSF = function(scalarField, t){
     mesh = new THREE.Mesh( geometry, material );
     this.scene.add(mesh);
 
+    // add line
+    let BorderMesh = this.renderBorder(color);
+    this.scene.add(BorderMesh);
+
     this.renderFeatures(t);
     this.animate();
 }
+
+SingleSF.prototype.renderBorder = function(color){
+    // add line
+    let lineWid = 0.01;
+    let points = [];
+    points.push(new THREE.Vector3(-SFAttr.w/2-lineWid, SFAttr.h/2+lineWid, 0));
+    points.push(new THREE.Vector3(SFAttr.w/2+lineWid, SFAttr.h/2+lineWid, 0));
+    points.push(new THREE.Vector3(SFAttr.w/2+lineWid, -SFAttr.h/2-lineWid, 0));
+    points.push(new THREE.Vector3(-SFAttr.w/2-lineWid, -SFAttr.h/2-lineWid, 0));
+    points.push(new THREE.Vector3(-SFAttr.w/2-lineWid, SFAttr.h/2+lineWid, 0));
+
+    let geometryBorder = new THREE.BufferGeometry().setFromPoints(points);
+    geometryBorder.rotateZ(SFAttr.rotateAngle);
+    let border = new MeshLine();
+    border.setGeometry(geometryBorder);
+    let borderMaterial = new MeshLineMaterial({lineWidth: lineWid*2, color: new THREE.Color(color)});
+
+    return new THREE.Mesh(border, borderMaterial); 
+}
+
 
 /**
  * render all of the features at the time t
@@ -137,6 +161,8 @@ SingleSF.prototype.highlightFeatures = function(nodeLst){
             .rotateZ(SFAttr.rotateAngle);
         this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
     }
+    console.log(this.features);
+    console.log(nodeLst);
     
     for(let i = 0; i < nodeLst.length; i++){
         let node = nodeLst[i];

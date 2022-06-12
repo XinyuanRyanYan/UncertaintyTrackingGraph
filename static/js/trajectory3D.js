@@ -68,7 +68,7 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
     let SFLst = [];  
     for(key in SFDict){
         if(SFDict[key]!=-1){
-            SFLst.push(SFDict[key]);
+            SFLst.push([SFDict[key], key]);
         }
     }
     let gap = 3.5/(SFLst.length-1);    // the gap among different layers
@@ -77,7 +77,7 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
     // add each scalar field into the scene 
     for(let i = 0; i < SFLst.length; i++){
         // get the position of Z
-        this.addSF(SFLst[i], startZ+gap*i);
+        this.addSF(SFLst[i][0], startZ+gap*i, SFLst[i][1]);
     }
 
     // visualize the lines
@@ -90,10 +90,6 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
         }
         i += 1;
     }
-    // for(let i = 0; i < t_lst.length-1; i++){
-    //     // render the lines between each layer
-    //     this.renderLines(t_lst[i], startZ+gap*i, startZ+gap*(i+1));
-    // }
 
     // render the features of this timestamp
     let tIdx = 0;
@@ -112,8 +108,9 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
  * add the scalar field at timestamp t into the scene
  * @param {} t: timestamp
  * z: the translation in the z direction
+ * key: 'LL-SF', 'L-SF', 'SF', 'SF-R', 'SF-RR'} 
  */
-Trajectory3D.prototype.addSF = function(scalarField, z){
+Trajectory3D.prototype.addSF = function(scalarField, z, key){
     let geometry = new THREE.PlaneBufferGeometry( SFAttr.w, SFAttr.h, SFAttr.cols, SFAttr.rows ).translate(0, 0, z)
         .rotateX(Math.PI/2+Math.PI)
         .rotateY(SFAttr.rotateAngle);
@@ -135,6 +132,33 @@ Trajectory3D.prototype.addSF = function(scalarField, z){
     let material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, vertexColors: THREE.VertexColors } );
     mesh = new THREE.Mesh( geometry, material );
     this.scene.add(mesh);
+
+    // add border
+    let colorMap = {'SF': 0x980100, 'LL-SF': 0xF9CB9C, 'L-SF': 0xF9CB9C, 'SF-RR': 0xA4C2F4, 'SF-R': 0xA4C2F4}
+    let BorderMesh = this.renderBorder(colorMap[key], z);
+    this.scene.add(BorderMesh);
+}
+
+Trajectory3D.prototype.renderBorder = function(color, z){
+    // add line
+    let lineWid = 0.01;
+    let points = [];
+    points.push(new THREE.Vector3(-SFAttr.w/2-lineWid, SFAttr.h/2+lineWid, 0));
+    points.push(new THREE.Vector3(SFAttr.w/2+lineWid, SFAttr.h/2+lineWid, 0));
+    points.push(new THREE.Vector3(SFAttr.w/2+lineWid, -SFAttr.h/2-lineWid, 0));
+    points.push(new THREE.Vector3(-SFAttr.w/2-lineWid, -SFAttr.h/2-lineWid, 0));
+    points.push(new THREE.Vector3(-SFAttr.w/2-lineWid, SFAttr.h/2+lineWid, 0));
+
+    let geometryBorder = new THREE.BufferGeometry().setFromPoints(points);
+    geometryBorder
+        .translate(0, 0, z)
+        .rotateX(Math.PI/2+Math.PI)
+        .rotateY(SFAttr.rotateAngle);
+    let border = new MeshLine();
+    border.setGeometry(geometryBorder);
+    let borderMaterial = new MeshLineMaterial({lineWidth: lineWid*2, color: new THREE.Color(color)});
+
+    return new THREE.Mesh(border, borderMaterial); 
 }
 
 /**
@@ -176,18 +200,22 @@ Trajectory3D.prototype.renderLines = function(t, z1, z2){
  */
 Trajectory3D.prototype.addLine = function(pos1, pos2, pro, linkId){
     // add a link
+    let lineWid = 0.01;
     let points = [];
     points.push( new THREE.Vector3( pos1[0], pos1[1], pos1[2] ) );
     points.push( new THREE.Vector3( pos2[0], pos2[1], pos2[2] ) );
     let geometryLine = new THREE.BufferGeometry().setFromPoints( points )
         .rotateX(Math.PI/2+Math.PI)
         .rotateY(SFAttr.rotateAngle);
+    
+    let lineMesh = new MeshLine();
+    lineMesh.setGeometry(geometryLine);
 
-    // get the color of this line
     let color = visTrackingGraphObj.lineColorScale(pro);
+    let lineMaterial = new MeshLineMaterial({lineWidth: lineWid*2, color: new THREE.Color(color)});
 
-    let materialLine = new THREE.LineBasicMaterial( { color: new THREE.Color(color), linewidth: 300});
-    let line = new THREE.Line( geometryLine, materialLine );
+    let line = new THREE.Mesh(lineMesh, lineMaterial); 
+
     this.scene.add(line);
     this.lines[linkId+''] = line;
 }
