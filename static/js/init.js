@@ -41,23 +41,23 @@ let singleSFRightR = '';
 // 3D scalar fields
 let trajectorySF = '';
 
-// // 1. get the Json file of tracking graph
-// axios.post('/getTGData', {
-//     type: 'name'
-//     })
-//     .then((result) => {
-//         let TGData = result['data'];
-//         trackingGraphObj = new TrackingGraph(TGData);
-//         visTrackingGraphObj = new VisTrackingGraph();
-//         initSFAttr();
-//         initSF();
-//         lineColorScale = d3.scaleLinear()
-//             .domain(trackingGraphObj.pRange)
-//             .range([startColor, stopColor]);
-//         scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
-//     }).catch((err) => {
-//         console.log(err);
-//     });
+// 1. get the Json file of tracking graph
+axios.post('/getTGData', {
+    type: 'name'
+    })
+    .then((result) => {
+        let TGData = result['data'];
+        trackingGraphObj = new TrackingGraph(TGData);
+        visTrackingGraphObj = new VisTrackingGraph();
+        initSFAttr();
+        initSF();
+        lineColorScale = d3.scaleLinear()
+            .domain(trackingGraphObj.pRange)
+            .range([startColor, stopColor]);
+        scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+    }).catch((err) => {
+        console.log(err);
+    });
 
 
 function initSFAttr(){
