@@ -6,6 +6,8 @@
  * @param {*} param1    style for the lengend svg
  */
 function Legend(divSelector, {width = 200, height = 10, probRange = [0, 1]} = {}){
+    // clear 
+    divSelector.selectAll('svg').remove();
     // add the legend svg (size is the same as divSelector)
     let divWid = divSelector.style('width'),
     divHei = divSelector.style('height');

@@ -11,6 +11,7 @@ def index():
 
 @app.route("/changeData", methods=['POST'])
 def changeData():
+    global dataName
     paras = request.get_json()
     dataName = paras['data']
     return jsonify(load_json_data(dataName))
@@ -18,6 +19,7 @@ def changeData():
 
 @app.route("/getTGData", methods=['POST'])
 def getTGData():
+    global dataName
     return jsonify(load_json_data(dataName))    # VortexWithMin HeatedFlowVelocity IonizationFront jungtelziemniak
 
 @app.route("/getScalarFields", methods=['POST'])
@@ -29,6 +31,7 @@ def getScalarFields():
     Returns:
         {'LL-SF': [scalar filed], 'L-SF': [], 'SF': t, []: t+1, 'SF-RR': []}
     '''
+    global dataName
     paras = request.get_json()
     print('paras', paras)
     for key in paras:

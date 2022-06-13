@@ -3,7 +3,7 @@
 class VisTrackingGraph{
     constructor(){
         // 0. clear
-        d3.select('#pureGTDiv').select('svg').remove();
+        d3.select('#pureGTDiv').selectAll('*').remove();
 
         // 1. set the dimension of the tracking graph div
         this.dim = {
@@ -34,7 +34,8 @@ class VisTrackingGraph{
         this.visCoordsSys();
 
         // 6. visualize the legend
-        // Legend(d3.select('#legendDiv'), {probRange: trackingGraphObj.pRange});
+        Legend(d3.select('#pureGTDiv').append('div').classed('legendDiv', true), 
+            {probRange: trackingGraphObj.pRange});
 
         // 7. visualize the links
         this.linksSelection = '';

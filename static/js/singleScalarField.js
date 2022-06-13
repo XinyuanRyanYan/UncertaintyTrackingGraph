@@ -164,8 +164,8 @@ SingleSF.prototype.highlightFeatures = function(nodeLst){
             .rotateZ(SFAttr.rotateAngle);
         this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
     }
-    console.log(this.features);
-    console.log(nodeLst);
+    // console.log(this.features);
+    // console.log(nodeLst);
     
     for(let i = 0; i < nodeLst.length; i++){
         let node = nodeLst[i];

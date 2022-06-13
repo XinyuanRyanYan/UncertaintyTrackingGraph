@@ -21,6 +21,8 @@ class Trajectory3D{
         this.centerT = '';  // center timestamp
         this.init();
         this.renderer.render( this.scene, this.camera );
+
+        this.lineWid = 0.01;    // render the path
     }    
 }
 
@@ -203,7 +205,6 @@ Trajectory3D.prototype.renderLines = function(t, z1, z2){
  */
 Trajectory3D.prototype.addLine = function(pos1, pos2, pro, linkId){
     // add a link
-    let lineWid = 0.01;
     let points = [];
     points.push( new THREE.Vector3( pos1[0], pos1[1], pos1[2] ) );
     points.push( new THREE.Vector3( pos2[0], pos2[1], pos2[2] ) );
@@ -215,7 +216,7 @@ Trajectory3D.prototype.addLine = function(pos1, pos2, pro, linkId){
     lineMesh.setGeometry(geometryLine);
 
     let color = visTrackingGraphObj.lineColorScale(pro);
-    let lineMaterial = new MeshLineMaterial({lineWidth: lineWid*2, color: new THREE.Color(color)});
+    let lineMaterial = new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color)});
 
     let line = new THREE.Mesh(lineMesh, lineMaterial); 
 
@@ -273,7 +274,8 @@ Trajectory3D.prototype.highlightPath = function(node){
         let link = selectedLinks[j];
         // get the color of this line
         let color = visTrackingGraphObj.highlightColorScale(link['p']);
-        this.lines[link['id']].material = new THREE.LineBasicMaterial( { color: new THREE.Color(color), linewidth: 1} );
+        // this.lines[link['id']].material = new THREE.LineBasicMaterial( { color: new THREE.Color(color), linewidth: 1} );
+        this.lines[link['id']].material= new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color)});
     }
 
     this.animate();

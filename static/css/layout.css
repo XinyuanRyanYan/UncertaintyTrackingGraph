@@ -38,18 +38,18 @@
     right: 5;
     top: 5px;
     margin: 0 0 auto auto; */
+    position: relative;
     overflow: auto;
 }
 
-#legendDiv {
+.legendDiv {
     width: 260px;
     height: 50px;
     border: 0px solid grey;
     padding: 0px;
     position: absolute;
-    left: 0;
-    right: 680px;
-    top: 585px;
+    left: 2%;
+    top: 91%;
     margin: 0 0 auto auto;
     z-index: 1;
 }
