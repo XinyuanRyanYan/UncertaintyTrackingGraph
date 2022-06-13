@@ -27,5 +27,14 @@
     font-size: 18px;
     font-weight: 800;
     color: #44546A;
-    z-index: 0;
+    background-color: #D6DCE5;
+    z-index: -1;
+}
+
+#dataSelector{
+    display: block;
+    margin: auto;
+    position: absolute;
+    left: 85px;
+    top: 5px;
 }

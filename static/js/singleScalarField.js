@@ -9,6 +9,9 @@
 
 class SingleSF {
     constructor(divId) {
+        // remove first
+        d3.select(divId).selectAll('*').remove();
+
         this.divId = divId;
         this.width = parseInt(d3.select(this.divId).style('width'));
         this.height = parseInt(d3.select(this.divId).style('height'));

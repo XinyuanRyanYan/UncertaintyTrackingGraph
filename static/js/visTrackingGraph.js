@@ -2,6 +2,9 @@
 
 class VisTrackingGraph{
     constructor(){
+        // 0. clear
+        d3.select('#pureGTDiv').select('svg').remove();
+
         // 1. set the dimension of the tracking graph div
         this.dim = {
             padding: {left: 15, right: 15, top: 25, bottom: 5},

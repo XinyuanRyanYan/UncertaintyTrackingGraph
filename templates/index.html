@@ -12,12 +12,14 @@
     </head>
     <body>
         <div id="overallDiv">
-            <div id="webTitle" style="background-color: #D6DCE5;">
+            <div id="webTitle">
                 <p class="titleStyle">Uncertain Tracking Graph</p>
-                <label class="dataSelector" for="dataS">Protected Attributes</label>
-                <select id="dataS" name="dataS">
-                    <option value="gender">gender</option>
-                    <option value="gender">defder</option>
+                <label for="dataS" style="left: 20px; position: absolute; line-height: 200%;">Dataset:</label>
+                <select id="dataSelector" name="dataS" onchange="changeDataset(event)">
+                    <option value="HeatedFlowVelocity">HeatedFlowVelocity</option>
+                    <option value="VortexWithMin">VortexWithMin</option>
+                    <option value="IonizationFront">IonizationFront</option>
+                    <option value="jungtelziemniak">jungtelziemniak</option>
                 </select>
             </div>
             <div id="pureGTDiv"></div>

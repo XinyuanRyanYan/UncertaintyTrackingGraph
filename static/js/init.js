@@ -60,6 +60,30 @@ axios.post('/getTGData', {
     });
 
 
+function changeDataset(event){
+    // trigger this when change the dataset
+    const dataName = event.target.value;
+    console.log('result,', dataName);
+    axios.post('/changeData', {
+            data: dataName
+        })
+        .then((result) => {
+            let TGData = result['data'];
+            trackingGraphObj = new TrackingGraph(TGData);
+            visTrackingGraphObj = new VisTrackingGraph();
+            initSFAttr();
+            initSF();
+            lineColorScale = d3.scaleLinear()
+                .domain(trackingGraphObj.pRange)
+                .range([startColor, stopColor]);
+            scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+        }).catch((err) => {
+            console.log(err);
+        });
+    
+
+}
+
 function initSFAttr(){
     SFAttr.rows = trackingGraphObj.SFDim[0]-1;    // the number of rows, the node num in this row = rows + 1   (150, 450) (600, 248)
     SFAttr.cols = trackingGraphObj.SFDim[1]-1;
