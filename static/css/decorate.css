@@ -15,11 +15,17 @@
 }
 
 .titleStyle{
+    text-align: center;
     display: block;
+    line-height: 170%;
     position: absolute;
     margin: auto;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #44546A;
+    z-index: 0;
 }
