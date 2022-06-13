@@ -31,7 +31,7 @@ class VisTrackingGraph{
         this.visCoordsSys();
 
         // 6. visualize the legend
-        Legend(d3.select('#legendDiv'), {probRange: trackingGraphObj.pRange});
+        // Legend(d3.select('#legendDiv'), {probRange: trackingGraphObj.pRange});
 
         // 7. visualize the links
         this.linksSelection = '';
