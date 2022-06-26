@@ -4,13 +4,15 @@ function clickNode(nodeD){
     let id = nodeD.id;
     let t = nodeD.t;
 
+    let highlight = true;
+
     // 1. if node is focused, then restore
     if(id == focusNode){
         restoreNode();
         // restore the 2d scalar fields and the 3D scalar fields
         return;
     }
-    // 2. else
+    // 2. focus node already exits
     if(focusNode != ''){
         if(focusT == t){
             restoreNode();
@@ -20,16 +22,22 @@ function clickNode(nodeD){
             fishEyeLayoutHandler(t);
             focusT = t;
             // vis scalar fields
-            visScalarFields(t);
+            visScalarFields(t, nodeD);
+            highlight = false;
         }
     }
-    else{
-        if(focusT == ''){
+    else{ // new focus node
+        if(focusT == '' || focusT != t){ // no focus T or t != T
             fishEyeLayoutHandler(t);
             focusT = t;
             // vis scalar fields
-            visScalarFields(t);
+            visScalarFields(t, nodeD);
+            highlight = false;
+            console.log('this is a new node')
         }
+        // else{   // t = T
+
+        // }
     }
 
     focusNode = id;
@@ -44,11 +52,13 @@ function clickNode(nodeD){
     // 4. highlight these nodes and links
     styleNodesLinks();
 
-    // 5. hightlight the nodes in the five scalar fields
-    higlightNodesSSF(nodeD);
+    if(highlight){
+        // 5. hightlight the nodes in the five scalar fields
+        higlightNodesSSF(nodeD);
 
-    // 6. highlight the nodes and path in the scalar feilds
-    trajectorySF.highlightPath(nodeD);
+        // 6. highlight the nodes and path in the scalar feilds
+        trajectorySF.highlightPath(nodeD);
+    }
 }
 
 function higlightNodesSSF(node){

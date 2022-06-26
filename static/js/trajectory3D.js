@@ -332,3 +332,18 @@ Trajectory3D.prototype.restorePath = function(opa = 0){
     }
 
 }
+
+/**
+ * reset
+ */
+
+Trajectory3D.prototype.reset = function(){
+    this.camera = new THREE.PerspectiveCamera( 70, this.width / this.height, 0.01, 10 );
+    this.camera.position.z = 3.5;
+    this.scene.clear();
+    this.controls = new OrbitControls( this.camera, this.renderer.domElement);
+    this.lines = {};    // {lineId: lineGeometry}
+    this.features = {};
+    this.highlightFeatureIndex = '';
+    this.animate();
+}

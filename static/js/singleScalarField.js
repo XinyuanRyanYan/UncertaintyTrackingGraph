@@ -156,14 +156,7 @@ SingleSF.prototype.renderFeatures = function(t){
  */
 SingleSF.prototype.highlightFeatures = function(nodeLst){
     // restore the previous one
-    for(key in this.features){
-        let curNode = trackingGraphObj.nodes[key];
-        let row = curNode['r'], col = curNode['c'];
-        this.features[key].geometry = new THREE.CircleGeometry( 0.01, 32 )
-            .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
-            .rotateZ(SFAttr.rotateAngle);
-        this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
-    }
+    this.restore();
     // console.log(this.features);
     // console.log(nodeLst);
     
@@ -180,13 +173,24 @@ SingleSF.prototype.highlightFeatures = function(nodeLst){
     this.animate();
 }
 
+/**
+ * restore the style of all features
+ */
 SingleSF.prototype.restore = function(){
     for(key in this.features){
         let curNode = trackingGraphObj.nodes[key];
         let row = curNode['r'], col = curNode['c'];
         this.features[key].geometry = new THREE.CircleGeometry( 0.01, 32 )
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
-            .rotateZ(this.rotateAngle);
+            .rotateZ(SFAttr.rotateAngle);
         this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
     }
+}
+
+// reset the scalar fields
+SingleSF.prototype.reset = function(){
+     // first remove previous scalarfield
+     this.scene.clear();
+     this.renderer.clear();
+     this.animate();
 }

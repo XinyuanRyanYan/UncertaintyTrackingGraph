@@ -1,13 +1,16 @@
 /**response to the event of clicking a timestamp*/
 
 function fishEyeLayoutHandler(t){
+    clearScalarFields(); // clear all scalar fields
     // if this t is already focused, restore the focusnode and fisheye
-    restoreNode();
-    visTrackingGraphObj.clickTimestamp(t);
     if(t == focusT){
         restoreFishEye();
         return;
     }
+    // else change the style, then use fisheye
+    restoreNode();
+    visTrackingGraphObj.clickTimestamp(t);  // change the style of nodes/links/text/timestamps in the tracking graph visualization
+    
     // parameter of fisheye
     focusT = t;
     let mF = 3;
@@ -95,6 +98,8 @@ function fishEyeLayoutHandler(t){
         });
     }
 
+    /*********Finally, render the scalar feilds********/
+    visScalarFields(t);
 }
 
 function restoreFishEye(){
@@ -154,6 +159,8 @@ function restoreFishEye(){
         .style('stroke', null);
     timeLinesSelection
         .selectAll('text')
-        .style("fill", null);
+        .style("fill", null)
+        .style('font-size', null)
+        .style('font-weight', null);   
 }
 

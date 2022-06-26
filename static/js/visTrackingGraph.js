@@ -100,7 +100,7 @@ class VisTrackingGraph{
                     .classed('labelText', true)
                     .on('click', ()=>{
                         // that.clickTimestamp(i);
-                        visScalarFields(i);
+                        // visScalarFields(i);
                         fishEyeLayoutHandler(i);
                     });
             });
@@ -153,7 +153,7 @@ class VisTrackingGraph{
             .attr('d', link);
     }
 
-    // change the style after clicking on a node
+    // change the style of timebars after clicking on a node
     clickTimestamp(timestamp){
         // 1. restore the style of the timebar
         this.timeLinesSelection

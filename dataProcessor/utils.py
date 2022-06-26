@@ -115,7 +115,7 @@ def load_SF_data(data_name, t):
     load the scalar filed of the 'data_name' at timestamp t
     '''
     scalar_field = []
-    with open('static/data/'+data_name+'/matrix/data_' + str(t)+'.txt', 'r') as f:
+    with open('static/data/'+data_name+'/matrix/data_' + str(t)+'_min.txt', 'r') as f:
         for line in f.readlines():
             if line:
                 line = [float(x) for x in line.strip().split()]

@@ -119,12 +119,13 @@ function initSF(){
     trajectorySF = new Trajectory3D('#threeDPathDiv');
 }
 
-function visScalarFields(t){
+function visScalarFields(t, nodeD =''){
     /**
      * visualize the five scalar feilds down below the tracking graph
      * 
      * Args:
      *  t: the focused timestamp
+     *  nodeD: the focus feature
      */
     let getTDict = (t)=>{
         /* {'LL-SF': t-2, 'L-SF': t-1, 'SF': t, 'SF-R': t+1, 'SF-RR': t+2} */
@@ -150,8 +151,29 @@ function visScalarFields(t){
             singleSFRight.renderSF(scalarFields['SF-R'], t+1, 0xA4C2F4); 
             singleSFRightR.renderSF(scalarFields['SF-RR'], t+2, 0xA4C2F4);
             trajectorySF.rendering(scalarFields, t);
+            // console.log('render all featuresß');
+
+            if(nodeD){
+                // five scalar feilds
+                // console.log('render features');
+                higlightNodesSSF(nodeD);
+                trajectorySF.highlightPath(nodeD); // 3D scalar feilds
+            }
+
         })
         .catch((err)=>{
             console.log(err);
         });
+}
+
+// clear all scalar fields
+function clearScalarFields(){
+    if(trajectorySF){
+        trajectorySF.reset();
+        singleSFMiddle.reset();
+        singleSFLeft.reset();
+        singleSFRight.reset();
+        singleSFLeftL.reset();
+        singleSFRightR.reset();
+    }
 }
