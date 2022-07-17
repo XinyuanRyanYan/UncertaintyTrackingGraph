@@ -121,7 +121,7 @@ function styleNodesLinks(highlight = true){
             .style('stroke-width', ()=>highlight? '2.3': null);
     });
     d3.select('#node-'+focusNode)
-        .style('fill', ()=>highlight? orangeStopColor:null)
+        .style('fill', ()=>highlight? greenStopColor:null)
         .style('r', ()=>highlight? '4':null)
         .style('fill-opacity', ()=>highlight? 1 : null);
 }

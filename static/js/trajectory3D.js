@@ -241,7 +241,7 @@ Trajectory3D.prototype.renderFeatures = function(t, z){
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2),z)
             .rotateX(Math.PI/2+Math.PI)
             .rotateY(SFAttr.rotateAngle);
-        const material = new THREE.MeshBasicMaterial( { color: 'orange' } );
+        const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
         const circle = new THREE.Mesh( geometry, material );
 
         // add this node into the features
@@ -262,7 +262,7 @@ Trajectory3D.prototype.highlightPath = function(node){
 
     // highlight this node
     let index = node['id']+'';
-    this.features[index].material = new THREE.MeshBasicMaterial( { color:  'red'} );
+    this.features[index].material = new THREE.MeshBasicMaterial( { color:  new THREE.Color(greenStopColor)} );
 
     // highlight path
     let selectedLinks = [];

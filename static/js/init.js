@@ -19,6 +19,10 @@ let orangeScale = d3.scaleSequential([0,1], d3.interpolateOranges);     // the c
 let orangeStartColor = orangeScale(0.05);
 let orangeStopColor = orangeScale(0.9);
 
+let greenScale = d3.scaleSequential([0,1], d3.interpolateGreens);     // the color range of the line
+let greenStartColor = greenScale(0.05);
+let greenStopColor = greenScale(0.75);
+
 // focused node or timestamp
 let focusT =  '';
 let focusNode = '';
@@ -54,7 +58,8 @@ axios.post('/getTGData', {
         lineColorScale = d3.scaleLinear()
             .domain(trackingGraphObj.pRange)
             .range([startColor, stopColor]);
-        scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+        // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+        scalarFieldColorScale = d3.scaleLinear().domain(TGData.SFRange).range(['purple', 'orange']); 
     }).catch((err) => {
         console.log(err);
     });
@@ -76,7 +81,8 @@ function changeDataset(event){
             lineColorScale = d3.scaleLinear()
                 .domain(trackingGraphObj.pRange)
                 .range([startColor, stopColor]);
-            scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+            // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+            scalarFieldColorScale = d3.scaleLinear().domain(TGData.SFRange).range(['purple', 'orange']); 
         }).catch((err) => {
             console.log(err);
         });

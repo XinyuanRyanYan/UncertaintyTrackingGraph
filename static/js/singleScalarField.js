@@ -135,10 +135,10 @@ SingleSF.prototype.renderFeatures = function(t){
         let row = node['r'], col = node['c'];
         
         // generate this circle
-        let geometry = new THREE.CircleGeometry( 0.01, 32 )             
+        let geometry = new THREE.CircleGeometry( 0.02, 32 )             
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
             .rotateZ(SFAttr.rotateAngle);
-        const material = new THREE.MeshBasicMaterial( { color: 'orange' } );
+        const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
         const circle = new THREE.Mesh( geometry, material );
 
         // add this node into the features
@@ -164,10 +164,10 @@ SingleSF.prototype.highlightFeatures = function(nodeLst){
         let node = nodeLst[i];
         let index = node['id']+'';
         let row = node['r'], col = node['c'];
-        this.features[index].geometry = new THREE.CircleGeometry( 0.02, 32 )
+        this.features[index].geometry = new THREE.CircleGeometry( 0.03, 64 )
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
             .rotateZ(SFAttr.rotateAngle);
-        this.features[index].material = new THREE.MeshBasicMaterial( { color:  'red'} );
+        this.features[index].material = new THREE.MeshBasicMaterial( { color: new THREE.Color(greenStopColor)} );
     }
     
     this.animate();
@@ -180,10 +180,10 @@ SingleSF.prototype.restore = function(){
     for(key in this.features){
         let curNode = trackingGraphObj.nodes[key];
         let row = curNode['r'], col = curNode['c'];
-        this.features[key].geometry = new THREE.CircleGeometry( 0.01, 32 )
+        this.features[key].geometry = new THREE.CircleGeometry( 0.02, 32 )
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
             .rotateZ(SFAttr.rotateAngle);
-        this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
+        this.features[key].material = new THREE.MeshBasicMaterial( { color:  0xFF0000} );   
     }
 }
 

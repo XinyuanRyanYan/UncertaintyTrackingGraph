@@ -52,7 +52,7 @@ class VisTrackingGraph{
             .range([startColor, stopColor]);
         this.highlightColorScale = d3.scaleLinear()
             .domain(trackingGraphObj.pRange)
-            .range([orangeStartColor, orangeStopColor]);
+            .range([greenStartColor, greenStopColor]);
     }
 
     // init the x, y scale
@@ -181,7 +181,7 @@ class VisTrackingGraph{
                 .style('font-weight', 800);
         }
         // highliht the focus t, and previous and following two timestamps
-        HLt(timestamp, '#980100'); // CC4125 DC7E6B
+        HLt(timestamp, greenStopColor); // CC4125 DC7E6B 980100
         HLt(timestamp+1, '#A4C2F4');
         HLt(timestamp+2, '#A4C2F4');
         HLt(timestamp-1, '#F9CB9C');
