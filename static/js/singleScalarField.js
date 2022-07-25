@@ -89,7 +89,7 @@ SingleSF.prototype.renderSF = function(scalarField, t, color){
     mesh = new THREE.Mesh( geometry, material );
     this.scene.add(mesh);
 
-    // add line
+    // add border
     let BorderMesh = this.renderBorder(color);
     this.scene.add(BorderMesh);
 

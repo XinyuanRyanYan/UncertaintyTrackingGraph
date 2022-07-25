@@ -139,7 +139,7 @@ Trajectory3D.prototype.addSF = function(scalarField, z, key){
     this.scene.add(mesh);
 
     // add border
-    let colorMap = {'SF': 0x980100, 'LL-SF': 0xF9CB9C, 'L-SF': 0xF9CB9C, 'SF-RR': 0xA4C2F4, 'SF-R': 0xA4C2F4}
+    let colorMap = {'SF': greenStopColor, 'LL-SF': 0xF9CB9C, 'L-SF': 0xF9CB9C, 'SF-RR': 0xA4C2F4, 'SF-R': 0xA4C2F4}
     let BorderMesh = this.renderBorder(colorMap[key], z);
     this.scene.add(BorderMesh);
 }

@@ -45,6 +45,29 @@ let singleSFRightR = '';
 // 3D scalar fields
 let trajectorySF = '';
 
+// color map for the scalar fields
+let colorMapTemp = ['rgb(45, 0, 75)',
+'rgb(69, 24, 113)',
+'rgb(95, 58, 145)',
+'rgb(122, 106, 167)',
+'rgb(153, 143, 191)',
+'rgb(183, 177, 213)',
+'rgb(207, 206, 229)',
+'rgb(228, 229, 239)',
+'rgb(247, 246, 245)',
+'rgb(251, 232, 204)',
+'rgb(253, 213, 159)',
+'rgb(253, 188, 107)',
+'rgb(237, 155, 57)',
+'rgb(217, 123, 18)',
+'rgb(189, 97, 9)',
+'rgb(158, 76, 7)'];
+// transform the rgb to hex
+let colorMap = [];
+colorMapTemp.forEach(ele=>{
+    colorMap.push(d3.color(ele).formatHex());
+});
+
 // 1. get the Json file of tracking graph
 axios.post('/getTGData', {
     type: 'name'
@@ -59,7 +82,15 @@ axios.post('/getTGData', {
             .domain(trackingGraphObj.pRange)
             .range([startColor, stopColor]);
         // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
-        scalarFieldColorScale = d3.scaleLinear().domain(TGData.SFRange).range(['purple', 'orange']); 
+        // split the values into 15 
+        let vLst = [];
+        let vGap = (TGData.SFRange[1]-TGData.SFRange[0])/15;
+        for(let i = 0; i < 16; i++){
+            vLst.push(TGData.SFRange[0]+vGap*i);
+        }
+        console.log('vLst', vLst);
+        console.log('colorMap', colorMap);
+        scalarFieldColorScale = d3.scaleLinear().domain(vLst).range(colorMap); 
     }).catch((err) => {
         console.log(err);
     });
@@ -82,7 +113,12 @@ function changeDataset(event){
                 .domain(trackingGraphObj.pRange)
                 .range([startColor, stopColor]);
             // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
-            scalarFieldColorScale = d3.scaleLinear().domain(TGData.SFRange).range(['purple', 'orange']); 
+            let vLst = [];
+            let vGap = (TGData.SFRange[1]-TGData.SFRange[0])/15;
+            for(let i = 0; i < 16; i++){
+                vLst.push(TGData.SFRange[0]+vGap*i);
+            }
+            scalarFieldColorScale = d3.scaleLinear().domain(vLst).range(colorMap); 
         }).catch((err) => {
             console.log(err);
         });
@@ -153,7 +189,7 @@ function visScalarFields(t, nodeD =''){
             let scalarFields = result['data'];
             singleSFLeftL.renderSF(scalarFields['LL-SF'], t-2, 0xF9CB9C); 
             singleSFLeft.renderSF(scalarFields['L-SF'], t-1, 0xF9CB9C);
-            singleSFMiddle.renderSF(scalarFields['SF'], t, 0x980100); 
+            singleSFMiddle.renderSF(scalarFields['SF'], t, greenStopColor); 
             singleSFRight.renderSF(scalarFields['SF-R'], t+1, 0xA4C2F4); 
             singleSFRightR.renderSF(scalarFields['SF-RR'], t+2, 0xA4C2F4);
             trajectorySF.rendering(scalarFields, t);
