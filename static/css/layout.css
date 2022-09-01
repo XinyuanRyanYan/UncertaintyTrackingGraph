@@ -47,11 +47,13 @@
     height: 50px;
     border: 0px solid grey;
     padding: 0px;
-    position: absolute;
-    left: 2%;
-    top: 91%;
-    margin: 0 0 auto auto;
-    z-index: 1;
+    position: fixed;
+    /* left: 2%;
+    top: -91%; */
+    /* top: 100px;
+    left: 100px;
+    margin: 0 0 -200px 0;
+    z-index: 1; */
 }
 
 #threeDPathDiv {

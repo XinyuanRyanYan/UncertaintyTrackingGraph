@@ -36,6 +36,8 @@ class VisTrackingGraph{
         // 6. visualize the legend
         Legend(d3.select('#pureGTDiv').append('div').classed('legendDiv', true), 
             {probRange: trackingGraphObj.pRange});
+        d3.select('.legendDiv').style('top', 35+divHei-60+'px')
+            .style('left', parseInt(d3.select('#threeDPathDiv').style('wdith'))+60+'px');
 
         // 7. visualize the links
         this.linksSelection = '';
