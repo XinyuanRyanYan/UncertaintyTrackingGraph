@@ -39,3 +39,17 @@
     top: 5px;
     /* color: #8497B0; */
 }
+
+.tooltip{	
+    position: absolute;			
+    text-align: center;			
+    width: 60px;				
+    height: 15px;					
+    padding: 2px;				
+    font: 12px  Arial;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 4px;			
+    pointer-events: none;
+    color: #44546A;	
+}

@@ -13,6 +13,8 @@ class VisTrackingGraph{
         let divHei = parseInt(d3.select('#pureGTDiv').style('height'));
         this.dim.wid = trackingGraphObj.timestamps*26 > divWid? trackingGraphObj.timestamps*26:divWid;
         this.dim.hei = trackingGraphObj.biggestYId*15 > divHei? trackingGraphObj.biggestYId*15:divHei;
+        // set the width of line
+        this.edgeWid = 1.5;
 
         // 2. set the color scale
         this.lineColorScale = '';
@@ -23,6 +25,10 @@ class VisTrackingGraph{
         this.TGSvg = d3.select('#pureGTDiv').append('svg')
             .attr('width', this.dim.wid+'px')
             .attr('height', this.dim.hei+'px');
+        // 3.1 tooltip
+        this.tooltip = d3.select("#pureGTDiv").append("div")	
+            .attr("class", "tooltip")				
+            .style("opacity", 0);
         
         // 4. init the scale
         this.xScale = '';
@@ -139,6 +145,7 @@ class VisTrackingGraph{
     }
 
     visLinks(){
+        let that = this;
         let link = d3.linkHorizontal()
             .source(d => [this.xScale(d.src.t), this.yScale(d.src.yId)])
             .target(d =>[this.xScale(d.tgt.t), this.yScale(d.tgt.yId)]);
@@ -149,10 +156,21 @@ class VisTrackingGraph{
             .append('path')
             .attr('id', d=>'link-'+d['id'])
             .attr('stroke', d=>this.lineColorScale(d.p))
-            .attr('stroke-width', '1.2')
+            .attr('stroke-width', this.edgeWid)
             .attr('stroke-opacity', 1)
             .attr('fill', 'none')
-            .attr('d', link);
+            .attr('d', link)
+            .on('mouseover', function(e, d){
+                d3.select(this).attr('stroke-width', that.edgeWid*2);
+                that.tooltip.transition().duration(100).style("opacity", .9);		
+                that.tooltip.html(d.p)	
+                    .style("left", e.offsetX + "px")		
+                    .style("top", (e.offsetY - 25) + "px");	
+            })
+            .on("mouseout", function(d) {	
+                d3.select(this).attr('stroke-width', that.edgeWid);	
+                that.tooltip.transition().duration(100).style("opacity", 0);	
+            });
     }
 
     // change the style of timebars after clicking on a node

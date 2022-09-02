@@ -8,9 +8,15 @@ let visTrackingGraphObj;    // the visualization object of the tracking graph
 let pThreshould = 0;
 
 // color of the line
-let blueScale = d3.scaleSequential([0,1], d3.interpolateBlues);     
-let startColor = blueScale(0.1);
-let stopColor = blueScale(0.75);
+// let blueScale = d3.scaleSequential([0,1], d3.interpolateBlues);     
+// let blueScale = d3.scaleSequential([0,1], d3.interpolateGnBu);  
+// let blueScale = d3.scaleSequential([0,1], d3.interpolatePuBuGn);  
+let blueScale = d3.scaleSequential([0,1], d3.interpolateYlGnBu);  
+// let blueScale = d3.scaleSequential([0,1], d3.interpolateRdBu);  
+
+
+let startColor = blueScale(0.1);    // 0.1 / 075
+let stopColor = blueScale(0.8);
 let nodeColor = '#888888';
 let lineColorScale;     // scalar feilds
 
@@ -19,9 +25,11 @@ let orangeScale = d3.scaleSequential([0,1], d3.interpolateOranges);     // the c
 let orangeStartColor = orangeScale(0.05);
 let orangeStopColor = orangeScale(0.9);
 
-let greenScale = d3.scaleSequential([0,1], d3.interpolateGreens);     // the color range of the line
+// let greenScale = d3.scaleSequential([0,1], d3.interpolateGreens);     // the color range of the line
+// let greenScale = d3.scaleSequential([0,1], d3.interpolateOrRd);     // the color range of the line
+let greenScale = d3.scaleSequential([0,1], d3.interpolateYlOrRd);     // the color range of the line
 let greenStartColor = greenScale(0.05);
-let greenStopColor = greenScale(0.75);
+let greenStopColor = greenScale(0.9);
 
 // focused node or timestamp
 let focusT =  '';
@@ -82,15 +90,22 @@ axios.post('/getTGData', {
             .domain(trackingGraphObj.pRange)
             .range([startColor, stopColor]);
         // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
+        scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateViridis); 
+        // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateInferno); 
+        // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateWarm); 
+        // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolatePRGn); 
+        // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateSpectral); 
+
+
         // split the values into 15 
-        let vLst = [];
-        let vGap = (TGData.SFRange[1]-TGData.SFRange[0])/15;
-        for(let i = 0; i < 16; i++){
-            vLst.push(TGData.SFRange[0]+vGap*i);
-        }
-        console.log('vLst', vLst);
-        console.log('colorMap', colorMap);
-        scalarFieldColorScale = d3.scaleLinear().domain(vLst).range(colorMap); 
+        // let vLst = [];
+        // let vGap = (TGData.SFRange[1]-TGData.SFRange[0])/15;
+        // for(let i = 0; i < 16; i++){
+        //     vLst.push(TGData.SFRange[0]+vGap*i);
+        // }
+        // console.log('vLst', vLst);
+        // console.log('colorMap', colorMap);
+        // scalarFieldColorScale = d3.scaleLinear().domain(vLst).range(colorMap); 
     }).catch((err) => {
         console.log(err);
     });
@@ -119,6 +134,8 @@ function changeDataset(event){
                 vLst.push(TGData.SFRange[0]+vGap*i);
             }
             scalarFieldColorScale = d3.scaleLinear().domain(vLst).range(colorMap); 
+            scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateViridis); 
+
         }).catch((err) => {
             console.log(err);
         });
