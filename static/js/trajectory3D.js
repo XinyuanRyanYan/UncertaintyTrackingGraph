@@ -283,8 +283,11 @@ Trajectory3D.prototype.highlightPath = function(node){
         // this.lines[link['id']].material = new THREE.LineBasicMaterial( { color: new THREE.Color(color), linewidth: 1} );
         this.lines[link['id']].material= new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color)});
         this.highlightLinesId.push(link['id']);
+        this.lines[link['id']].material.transparent = true;
         if(link['p']<pThreshould){        
-            this.lines[link['id']].material.transparent = true;
+            this.lines[link['id']].material.opacity = 0;
+        }
+        else{
             this.lines[link['id']].material.opacity = 1;
         }
     }
