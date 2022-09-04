@@ -1,6 +1,6 @@
-/**response to the event of clicking a timestamp*/
+/**response to the event of clicking a timestamp, and the focus node, if applicable*/
 
-function fishEyeLayoutHandler(t){
+function fishEyeLayoutHandler(t, nodeD = ''){
     clearScalarFields(); // clear all scalar fields
     // if this t is already focused, restore the focusnode and fisheye
     if(t == focusT){
@@ -99,12 +99,17 @@ function fishEyeLayoutHandler(t){
     }
 
     /*********Finally, render the scalar feilds********/
-    visScalarFields(t);
+    visScalarFields(t, nodeD);
 }
 
 function restoreFishEye(){
     // change the focusT
     focusT = '';
+
+    // if have focus node already, restore first
+    if(focusNode){
+        clickNode(focusNode);
+    }
 
     // visualize all nodes and links
     let timeLinesSelection = visTrackingGraphObj.timeLinesSelection;

@@ -7,40 +7,37 @@ function clickNode(nodeD){
     let highlight = true;
 
     // 1. if node is focused, then restore
-    if(id == focusNode){
+    if(focusNode && id == focusNode.id){
         restoreNode();
         // restore the 2d scalar fields and the 3D scalar fields
         return;
     }
     // 2. focus node already exits
-    if(focusNode != ''){
+    if(focusNode){
         if(focusT == t){
             restoreNode();
         }
         else if(focusT != ''){
             restoreNode();
-            fishEyeLayoutHandler(t);
+            fishEyeLayoutHandler(t, nodeD);
             focusT = t;
             // vis scalar fields
-            visScalarFields(t, nodeD);
+            // visScalarFields(t, nodeD);
             highlight = false;
         }
     }
     else{ // new focus node
         if(focusT == '' || focusT != t){ // no focus T or t != T
-            fishEyeLayoutHandler(t);
+            fishEyeLayoutHandler(t, nodeD);
             focusT = t;
             // vis scalar fields
-            visScalarFields(t, nodeD);
+            // visScalarFields(t, nodeD);
             highlight = false;
-            console.log('this is a new node')
+            console.log('this is a new node');
         }
-        // else{   // t = T
-
-        // }
     }
 
-    focusNode = id;
+    focusNode = nodeD;
 
     // 3. store and highlight current node, parent nodes, child nodes/ and links 
     let parentData = getPorCInfo(nodeD, 'parents');
@@ -53,6 +50,7 @@ function clickNode(nodeD){
     styleNodesLinks();
 
     if(highlight){
+        console.log('we need to highlight');
         // 5. hightlight the nodes in the five scalar fields
         higlightNodesSSF(nodeD);
 
@@ -120,7 +118,7 @@ function styleNodesLinks(highlight = true){
             .style('stroke', (d)=>highlight? colorScale(d.p):null)
             .style('stroke-width', ()=>highlight? '2.3': null);
     });
-    d3.select('#node-'+focusNode)
+    d3.select('#node-'+focusNode.id)
         .style('fill', ()=>highlight? greenStopColor:null)
         .style('r', ()=>highlight? '4':null)
         .style('fill-opacity', ()=>highlight? 1 : null);

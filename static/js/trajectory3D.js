@@ -23,6 +23,8 @@ class Trajectory3D{
         this.renderer.render( this.scene, this.camera );
 
         this.lineWid = 0.01;    // render the path
+
+        this.highlightLinesId = [];   // the id of highlight line
     }    
 }
 
@@ -219,6 +221,10 @@ Trajectory3D.prototype.addLine = function(pos1, pos2, pro, linkId){
     let lineMaterial = new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color)});
 
     let line = new THREE.Mesh(lineMesh, lineMaterial); 
+    if(pro < pThreshould){
+        line.material.transparent = true;
+        line.material.opacity = 0;
+    }
 
     this.scene.add(line);
     this.lines[linkId+''] = line;
@@ -276,6 +282,11 @@ Trajectory3D.prototype.highlightPath = function(node){
         let color = visTrackingGraphObj.highlightColorScale(link['p']);
         // this.lines[link['id']].material = new THREE.LineBasicMaterial( { color: new THREE.Color(color), linewidth: 1} );
         this.lines[link['id']].material= new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color)});
+        this.highlightLinesId.push(link['id']);
+        if(link['p']<pThreshould){        
+            this.lines[link['id']].material.transparent = true;
+            this.lines[link['id']].material.opacity = 1;
+        }
     }
 
     this.animate();
@@ -326,11 +337,44 @@ Trajectory3D.prototype.restorePath = function(opa = 0){
         let color = visTrackingGraphObj.lineColorScale(link['p']);
         // color = '#888888';
         // this.lines[key].material = new THREE.LineBasicMaterial( { transparent: true, opacity: opa } );
-        this.lines[key].material.opacity = opa;
+        if(opa == 1){
+            if(pThreshould<link['p']){this.lines[key].material.opacity = opa;}
+        }
+        else{
+            this.lines[key].material.opacity = opa;
+        }
         this.lines[key].material.transparent = true;
         this.lines[key].material.color = new THREE.Color(color);
     }
+    // reset the highlight lines
+    this.highlightLinesId = [];
+}
 
+// update links when threshould changes
+Trajectory3D.prototype.updatePath = function(){
+    for(key in this.lines){
+        let link = trackingGraphObj.links[parseInt(key)];
+        let line = this.lines[key];
+        // increase threshould
+        if(line.material.opacity!=0){
+            if(link['p']<pThreshould){
+                line.material.opacity = 0;
+                line.material.transparent = true;
+            }
+        }
+        // decrease threshould
+        else{
+            if(link['p']>pThreshould){
+                // when have focus node
+                if(focusNode && !this.highlightLinesId.includes(parseInt(key))){
+                }
+                else{
+                    line.material.opacity = 1;
+                }
+            }
+            
+        }
+    }
 }
 
 /**

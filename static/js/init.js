@@ -178,7 +178,8 @@ function initSF(){
     trajectorySF = new Trajectory3D('#threeDPathDiv');
 }
 
-function visScalarFields(t, nodeD =''){
+function visScalarFields(t, nodeD){
+    console.log('visualize nodeD', nodeD);
     /**
      * visualize the five scalar feilds down below the tracking graph
      * 
@@ -213,6 +214,7 @@ function visScalarFields(t, nodeD =''){
             // console.log('render all featuresß');
 
             if(nodeD){
+                console.log('here we have node d');
                 // five scalar feilds
                 // console.log('render features');
                 higlightNodesSSF(nodeD);

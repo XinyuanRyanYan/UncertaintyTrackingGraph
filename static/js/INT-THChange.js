@@ -82,5 +82,8 @@ function threshChangeReaction(){
                 .attr('fill-opacity', opacity);
         }      
     });
+
+    // check links in 3D scalar feilds
+    if(trajectorySF){trajectorySF.updatePath();}
 }
 
