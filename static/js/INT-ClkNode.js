@@ -72,21 +72,29 @@ function higlightNodesSSF(node){
     let ccNodes = [];
 
     for(let i = 0; i < node['parents'].length; i++){
-        pNodes.push(node['parents'][i]['node'])
+        if(node['parents'][i]['p']>pThreshould){
+            pNodes.push(node['parents'][i]['node']);
+        }
     }
     for(let i = 0; i < node['children'].length; i++){
-        cNodes.push(node['children'][i]['node'])
+        if(node['children'][i]['p']>pThreshould){
+            cNodes.push(node['children'][i]['node']);
+        }
     }
     for(let i = 0; i < pNodes.length; i++){
         let curNode = pNodes[i];
         for(let j = 0; j < curNode['parents'].length; j++){
-            ppNodes.push(curNode['parents'][j]['node'])
+            if(node['parents'][i]['p']>pThreshould){
+                ppNodes.push(curNode['parents'][j]['node']);
+            }
         }
     }
     for(let i = 0; i < cNodes.length; i++){
         let curNode = cNodes[i];
         for(let j = 0; j < curNode['children'].length; j++){
-            ccNodes.push(curNode['children'][j]['node'])
+            if(node['children'][i]['p']>pThreshould){
+                ccNodes.push(curNode['children'][j]['node']);
+            }
         }
     }
     if(pNodes.length != 0){

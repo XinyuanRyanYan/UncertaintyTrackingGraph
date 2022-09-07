@@ -53,6 +53,9 @@ let singleSFRightR = '';
 // 3D scalar fields
 let trajectorySF = '';
 
+// color for features in scalar fields
+let featureColor = 0xFF00FF;
+
 // color map for the scalar fields
 let colorMapTemp = ['rgb(45, 0, 75)',
 'rgb(69, 24, 113)',

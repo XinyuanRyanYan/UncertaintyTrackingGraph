@@ -220,11 +220,11 @@ Trajectory3D.prototype.addLine = function(pos1, pos2, pro, linkId){
     let color = visTrackingGraphObj.lineColorScale(pro);
     let lineMaterial = new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color)});
 
-    let line = new THREE.Mesh(lineMesh, lineMaterial); 
-    if(pro < pThreshould){
-        line.material.transparent = true;
-        line.material.opacity = 0;
-    }
+    let line = new THREE.Mesh(lineMesh, lineMaterial);
+
+    line.material.transparent = true;
+    line.material.opacity = pro < pThreshould? 0 : 1;
+    line.material.depthWrite = false;
 
     this.scene.add(line);
     this.lines[linkId+''] = line;
@@ -247,7 +247,7 @@ Trajectory3D.prototype.renderFeatures = function(t, z){
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2),z)
             .rotateX(Math.PI/2+Math.PI)
             .rotateY(SFAttr.rotateAngle);
-        const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
+        const material = new THREE.MeshBasicMaterial( { color: featureColor } );
         const circle = new THREE.Mesh( geometry, material );
 
         // add this node into the features
@@ -281,7 +281,7 @@ Trajectory3D.prototype.highlightPath = function(node){
         // get the color of this line
         let color = visTrackingGraphObj.highlightColorScale(link['p']);
         // this.lines[link['id']].material = new THREE.LineBasicMaterial( { color: new THREE.Color(color), linewidth: 1} );
-        this.lines[link['id']].material= new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color)});
+        this.lines[link['id']].material= new MeshLineMaterial({lineWidth: this.lineWid*2, color: new THREE.Color(color), depthWrite: false});
         this.highlightLinesId.push(link['id']);
         this.lines[link['id']].material.transparent = true;
         if(link['p']<pThreshould){        
@@ -331,7 +331,7 @@ Trajectory3D.prototype.highlightPath = function(node){
 Trajectory3D.prototype.restorePath = function(opa = 0){
     // restore all feature
     for(key in this.features){
-        this.features[key].material = new THREE.MeshBasicMaterial( { color:  'orange'} );   
+        this.features[key].material = new THREE.MeshBasicMaterial( { color:  featureColor} );   
     }
     // restore all lines
     for(key in this.lines){
@@ -341,12 +341,14 @@ Trajectory3D.prototype.restorePath = function(opa = 0){
         // color = '#888888';
         // this.lines[key].material = new THREE.LineBasicMaterial( { transparent: true, opacity: opa } );
         if(opa == 1){
-            if(pThreshould<link['p']){this.lines[key].material.opacity = opa;}
+            if(pThreshould<link['p']){
+                this.lines[key].material.transparent = true;
+                this.lines[key].material.opacity = opa;}
         }
         else{
+            this.lines[key].material.transparent = true;
             this.lines[key].material.opacity = opa;
         }
-        this.lines[key].material.transparent = true;
         this.lines[key].material.color = new THREE.Color(color);
     }
     // reset the highlight lines
@@ -373,6 +375,7 @@ Trajectory3D.prototype.updatePath = function(){
                 }
                 else{
                     line.material.opacity = 1;
+                    line.material.transparent = true;
                 }
             }
             

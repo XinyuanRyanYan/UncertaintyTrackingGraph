@@ -138,7 +138,7 @@ SingleSF.prototype.renderFeatures = function(t){
         let geometry = new THREE.CircleGeometry( 0.02, 32 )             
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
             .rotateZ(SFAttr.rotateAngle);
-        const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
+        const material = new THREE.MeshBasicMaterial( { color: featureColor } );
         const circle = new THREE.Mesh( geometry, material );
 
         // add this node into the features
@@ -183,7 +183,7 @@ SingleSF.prototype.restore = function(){
         this.features[key].geometry = new THREE.CircleGeometry( 0.02, 32 )
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
             .rotateZ(SFAttr.rotateAngle);
-        this.features[key].material = new THREE.MeshBasicMaterial( { color:  0xFF0000} );   
+        this.features[key].material = new THREE.MeshBasicMaterial( { color:  featureColor} );   
     }
 }
 

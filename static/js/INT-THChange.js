@@ -85,5 +85,7 @@ function threshChangeReaction(){
 
     // check links in 3D scalar feilds
     if(trajectorySF){trajectorySF.updatePath();}
+    // if focusnode exists, then highlight again
+    if(focusNode){higlightNodesSSF(focusNode);}
 }
 
