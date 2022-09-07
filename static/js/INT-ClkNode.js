@@ -33,7 +33,6 @@ function clickNode(nodeD){
             // vis scalar fields
             // visScalarFields(t, nodeD);
             highlight = false;
-            console.log('this is a new node');
         }
     }
 
@@ -172,13 +171,15 @@ function getPorCInfo(node, drt, dis=10000000){
         waitingNodes.forEach((ele)=>{
             let pNodeList = ele[drt];
             pNodeList.forEach((e)=>{    // for each parent/children
-                // add a link
-                focusLinks.push(e.link);
-                // add this node if it isn't in the newWaitNodes
-                let pNode = e.node;
-                if(!newWaitNodes.includes(pNode)){
-                    newWaitNodes.push(pNode);
-                    focusNodes.push(pNode);
+                if(e.p>pThreshould){
+                    // add a link
+                    focusLinks.push(e.link);
+                    // add this node if it isn't in the newWaitNodes
+                    let pNode = e.node;
+                    if(!newWaitNodes.includes(pNode)){
+                        newWaitNodes.push(pNode);
+                        focusNodes.push(pNode);
+                }
                 }
             });
         });

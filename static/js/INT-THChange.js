@@ -85,7 +85,23 @@ function threshChangeReaction(){
 
     // check links in 3D scalar feilds
     if(trajectorySF){trajectorySF.updatePath();}
-    // if focusnode exists, then highlight again
-    if(focusNode){higlightNodesSSF(focusNode);}
+    // if focusnode exists,
+    if(focusNode){
+        trajectorySF.highlightPath(focusNode);
+        // then highlight features in the scalar fields again
+        if(singleSFLeft){singleSFLeft.restore();}
+        if(singleSFLeftL){singleSFLeftL.restore();}
+        if(singleSFMiddle){singleSFMiddle.restore();}
+        if(singleSFRight){singleSFRight.restore();}
+        if(singleSFRightR){singleSFRightR.restore();}
+        higlightNodesSSF(focusNode);
+        // highlight the links in the tracking graph again
+      
+        styleNodesLinks(false);
+        let parentData = getPorCInfo(focusNode, 'parents');
+        let childData = getPorCInfo(focusNode, 'children');
+        highlightLinks = parentData[1].concat(childData[1]);
+        styleNodesLinks();
+    }
 }
 

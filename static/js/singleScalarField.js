@@ -167,7 +167,7 @@ SingleSF.prototype.highlightFeatures = function(nodeLst){
         this.features[index].geometry = new THREE.CircleGeometry( 0.03, 64 )
             .translate(col*SFAttr.w/SFAttr.cols-SFAttr.w/2, -(row*SFAttr.h/SFAttr.rows-SFAttr.h/2), 0)
             .rotateZ(SFAttr.rotateAngle);
-        this.features[index].material = new THREE.MeshBasicMaterial( { color: new THREE.Color(greenStopColor)} );
+        this.features[index].material = new THREE.MeshBasicMaterial( { color: new THREE.Color(featureHLColor)} );
     }
     
     this.animate();

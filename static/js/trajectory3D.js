@@ -268,7 +268,7 @@ Trajectory3D.prototype.highlightPath = function(node){
 
     // highlight this node
     let index = node['id']+'';
-    this.features[index].material = new THREE.MeshBasicMaterial( { color:  new THREE.Color(greenStopColor)} );
+    this.features[index].material = new THREE.MeshBasicMaterial( { color:  new THREE.Color(featureHLColor)} );
 
     // highlight path
     let selectedLinks = [];
@@ -302,8 +302,10 @@ Trajectory3D.prototype.highlightPath = function(node){
             for(let i = 0; i < parents.length; i++){
                 let parent = parents[i]['node'];
                 let link = parents[i]['link'];
-                selectedLinks.push(link);
-                findParents(parent);
+                if(link.p>pThreshould){
+                    selectedLinks.push(link);
+                    findParents(parent);
+                }
             }
         }
         
@@ -316,8 +318,10 @@ Trajectory3D.prototype.highlightPath = function(node){
             for(let i = 0; i < children.length; i++){
                 let child = children[i]['node'];
                 let link = children[i]['link'];
-                selectedLinks.push(link);
-                findChildren(child);
+                if(link.p>pThreshould){
+                    selectedLinks.push(link);
+                    findChildren(child);
+                }
             }
         }
         
