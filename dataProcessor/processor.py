@@ -514,7 +514,8 @@ class Processor:
         print('one node does not been found!')
 
 if __name__ == '__main__':
-    data_name = 'jungtelziemniak'        # HeatedFlowVelocity VortexWithMin IonizationFront jungtelziemniak
+    # new name: HeatedFlow; 
+    data_name = 'VortexStreet'        # HeatedFlow VortexStreet IonizationFront UnsteadyCylinderFlow
 
     # init all of the path
     NODE_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/track/treeNode_highlight_'

@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify, request
 from dataProcessor.utils import load_json_data, load_SF_data
 
 app = Flask(__name__)
-dataName = 'HeatedFlowVelocity'
+dataName = 'HeatedFlow'     # HeatedFlowVelocity
 
 @app.route("/")
 def index():

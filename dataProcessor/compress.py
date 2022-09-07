@@ -4,10 +4,10 @@ from pyrsistent import m
 PATH_PREFIX = '../static/data'    # the prefix of the data path
 
 
-data_name = 'jungtelziemniak'        # HeatedFlowVelocity VortexWithMin IonizationFront jungtelziemniak
+data_name = 'VortexStreet'        # HeatedFlow VortexStreet IonizationFront jungtelziemniak
 MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/data_'
 
-t = 499   # 31; 59; 123; 499
+t = 59;   # 31; 59; 123; 499
 for i in range(t):
     file_name = MATRIX_FILE_PREFIX+str(i)+'.txt'
     mtx = np.loadtxt(file_name)
