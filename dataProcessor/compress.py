@@ -4,7 +4,7 @@ from pyrsistent import m
 PATH_PREFIX = '../static/data'    # the prefix of the data path
 
 
-data_name = 'VortexStreet'        # HeatedFlow VortexStreet IonizationFront jungtelziemniak
+data_name = 'VortexWithMin'        # HeatedFlow VortexStreet IonizationFront jungtelziemniak
 MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/data_'
 
 t = 59;   # 31; 59; 123; 499
