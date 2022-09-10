@@ -43,11 +43,11 @@ class SingleSF {
  * init camera, scene, renderer, controls
  */
 SingleSF.prototype.init = function(){
-    this.camera = new THREE.PerspectiveCamera( 70, this.width / this.height, 0.01, 10 );
-    this.camera.position.z = 1.15;
+    this.camera = new THREE.PerspectiveCamera( 45, this.width / this.height, 0.01, 10 );
+    this.camera.position.z = 1.5;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( '#515770' );
+    this.scene.background = new THREE.Color( SFgbColor );
 
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
     this.renderer.setSize( this.width, this.height );

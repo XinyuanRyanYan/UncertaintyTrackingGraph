@@ -43,11 +43,11 @@ Trajectory3D.prototype.animate = function(){
  * init camera, scene, renderer, controls
  */
  Trajectory3D.prototype.init = function(){
-    this.camera = new THREE.PerspectiveCamera( 70, this.width / this.height, 0.01, 10 );
+    this.camera = new THREE.PerspectiveCamera( 45, this.width / this.height, 0.01, 10 );
     this.camera.position.z = 3.5;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( '#515770' );
+    this.scene.background = new THREE.Color( SFgbColor );
 
     this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
     this.renderer.setSize( this.width, this.height );
@@ -78,8 +78,8 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
             SFLst.push([SFDict[key], key]);
         }
     }
-    let gap = 3.5/(SFLst.length-1);    // the gap among different layers
-    let startZ = -1.7;       // the start Z
+    let gap = track3DHei/(SFLst.length-1);    // the gap among different layers
+    let startZ = -track3DHei/2;       // the start Z
 
     // add each scalar field into the scene 
     for(let i = 0; i < SFLst.length; i++){

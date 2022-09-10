@@ -114,7 +114,8 @@
     display: flex;
     justify-content: middle;
     align-items: middle;
-    border: 1px solid white;
+    border-left: 0.5px solid lightgrey;
+    border-right: 0.5px solid lightgrey;
     padding: 0px 0px 0px 0px;
 }
 

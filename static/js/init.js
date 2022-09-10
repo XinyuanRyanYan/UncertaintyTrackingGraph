@@ -19,6 +19,8 @@ let startColor = blueScale(0.1);    // 0.1 / 075
 let stopColor = blueScale(0.8);
 let nodeColor = '#888888';
 let lineColorScale;     // scalar feilds
+let SFgbColor = '#FFFFFF';
+let track3DHei = 3;
 
 // selected node color
 let orangeScale = d3.scaleSequential([0,1], d3.interpolateOranges);     // the color range of the line
@@ -119,7 +121,6 @@ axios.post('/getTGData', {
 function changeDataset(event){
     // trigger this when change the dataset
     const dataName = event.target.value;
-    console.log('result,', dataName);
     axios.post('/changeData', {
             data: dataName
         })
@@ -152,7 +153,7 @@ function initSFAttr(){
     SFAttr.rows = trackingGraphObj.SFDim[0]-1;    // the number of rows, the node num in this row = rows + 1   (150, 450) (600, 248)
     SFAttr.cols = trackingGraphObj.SFDim[1]-1;
     // when row > col, rotation is needec
-    SFAttr.rotateAngle = SFAttr.rows>SFAttr.cols? -Math.PI/2 : 0;
+    SFAttr.rotateAngle = SFAttr.rows>SFAttr.cols? Math.PI/2 : 0;
     SFAttr.h = 1.2;  // the width and height of the scalar fields in this scalar fields
     SFAttr.w = (d3.max([SFAttr.rows+1, SFAttr.cols+1])/d3.min([SFAttr.rows+1, SFAttr.cols+1]))*SFAttr.h; 
     if(SFAttr.rows>SFAttr.cols){
@@ -160,7 +161,6 @@ function initSFAttr(){
         SFAttr.h = SFAttr.w;
         SFAttr.w = temp;
     }
-    console.log(SFAttr);
 }
 
 function initSF(){
@@ -169,8 +169,8 @@ function initSF(){
      * init the 2d and 3d Saclar fields
      */
     let height = parseInt(d3.select('#timeAnalysisDiv').style('height'));
-    let width = SFAttr.w / SFAttr.h > 1?  height * SFAttr.w / SFAttr.h*5 : height * SFAttr.h / SFAttr.w*5 
-    console.log(width);
+    let width = SFAttr.w / SFAttr.h > 1?  height * SFAttr.w / SFAttr.h*4.9 : height * SFAttr.h / SFAttr.w*4.9
+
     d3.select('#timeAnalysisDiv').style('width', width+'px');
 
     // five scalar fields
@@ -184,7 +184,6 @@ function initSF(){
 }
 
 function visScalarFields(t, nodeD){
-    console.log('visualize nodeD', nodeD);
     /**
      * visualize the five scalar feilds down below the tracking graph
      * 
@@ -219,7 +218,6 @@ function visScalarFields(t, nodeD){
             // console.log('render all featuresß');
 
             if(nodeD){
-                console.log('here we have node d');
                 // five scalar feilds
                 // console.log('render features');
                 higlightNodesSSF(nodeD);
