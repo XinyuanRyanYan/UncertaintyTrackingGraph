@@ -73,11 +73,17 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
 
     // scalar fields 
     let SFLst = [];  
-    for(key in SFDict){
-        if(SFDict[key]!=-1){
-            SFLst.push([SFDict[key], key]);
-        }
+    // for(key in SFDict){
+    //     if(SFDict[key]!=-1){
+    //         SFLst.push([SFDict[key], key]);
+    //     }
     }
+    if('LL-SF' in SFDict){SFLst.push([SFDict['LL-SF'], 'LL-SF']);}
+    if('L-SF' in SFDict){SFLst.push([SFDict['L-SF'], 'L-SF']);}
+    if('SF' in SFDict){SFLst.push([SFDict['SF'], 'SF']);}
+    if('SF-R' in SFDict){SFLst.push([SFDict['SF-R'], 'SF-R']);}
+    if('SF-RR' in SFDict){SFLst.push([SFDict['SF-RR'], 'SF-RR']);}
+
     let gap = track3DHei/(SFLst.length-1);    // the gap among different layers
     let startZ = -track3DHei/2;       // the start Z
 
