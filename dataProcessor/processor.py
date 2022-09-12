@@ -515,13 +515,14 @@ class Processor:
 
 if __name__ == '__main__':
     # new name: HeatedFlow; 
-    data_name = 'VortexStreet'        # HeatedFlow VortexStreet IonizationFront UnsteadyCylinderFlow
+    data_name = 'Sample'        # HeatedFlow VortexStreet IonizationFront UnsteadyCylinderFlow
 
     # init all of the path
     NODE_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/track/treeNode_highlight_'
     MAP_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/track/oc_'
     MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/data_' 
-    X_MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/xlist_' 
+    # MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/monoMesh_'      # for the sample dataset
+    X_MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/xlist_'
     Y_MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/ylist_'
 
     # modify the name of file
