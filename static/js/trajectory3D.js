@@ -70,19 +70,18 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
     this.lines = {};    // {lineId: lineGeometry}
     this.features = {};
     this.highlightFeatureIndex = '';
-
     // scalar fields 
     let SFLst = [];  
     // for(key in SFDict){
     //     if(SFDict[key]!=-1){
     //         SFLst.push([SFDict[key], key]);
     //     }
-    }
-    if('LL-SF' in SFDict){SFLst.push([SFDict['LL-SF'], 'LL-SF']);}
-    if('L-SF' in SFDict){SFLst.push([SFDict['L-SF'], 'L-SF']);}
-    if('SF' in SFDict){SFLst.push([SFDict['SF'], 'SF']);}
-    if('SF-R' in SFDict){SFLst.push([SFDict['SF-R'], 'SF-R']);}
-    if('SF-RR' in SFDict){SFLst.push([SFDict['SF-RR'], 'SF-RR']);}
+    
+    if(SFDict['LL-SF']!=-1){SFLst.push([SFDict['LL-SF'], 'LL-SF']);}
+    if(SFDict['L-SF']!=-1){SFLst.push([SFDict['L-SF'], 'L-SF']);}
+    if(SFDict['SF']!=-1){SFLst.push([SFDict['SF'], 'SF']);}
+    if(SFDict['SF-R']!=-1){SFLst.push([SFDict['SF-R'], 'SF-R']);}
+    if(SFDict['SF-RR']!=-1){SFLst.push([SFDict['SF-RR'], 'SF-RR']);}
 
     let gap = track3DHei/(SFLst.length-1);    // the gap among different layers
     let startZ = -track3DHei/2;       // the start Z
@@ -98,7 +97,12 @@ Trajectory3D.prototype.rendering = function(SFDict, centerT){
     let cnt = 0, i = 0;
     for(key in SFDict){
         if(SFDict[key]!=-1 && i<4){
-            this.renderLines(centerT-2+i, startZ+gap*cnt, startZ+gap*(cnt+1));
+            let T = centerT;
+            if(key=='LL-SF'){T -= 2}
+            if(key=='L-SF'){T -= 1}
+            if(key=='SF-RR'){T += 2}
+            if(key=='SF-R'){T += 1}
+            this.renderLines(T, startZ+gap*cnt, startZ+gap*(cnt+1));
             cnt += 1;
         }
         i += 1;
@@ -179,6 +183,9 @@ Trajectory3D.prototype.renderBorder = function(color, z){
  * @param {*} t; z1 z2 represent the z-value of the layers
  */
 Trajectory3D.prototype.renderLines = function(t, z1, z2){
+    console.log('t', t);
+    console.log('z', z1, z2);
+    console.log(trackingGraphObj.nodesPerT);
     // nodes at this layer
     let nodeIds = trackingGraphObj.nodesPerT[t];
 
