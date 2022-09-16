@@ -10,7 +10,6 @@ return json
 }
 '''
 from os import X_OK, name
-from matplotlib.pyplot import sca
 import numpy as np
 from numpy import PINF, append, mat, matrix, nested_iters, recarray, result_type, timedelta64, unravel_index
 import copy

@@ -19,13 +19,15 @@ def changeData():
 
 @app.route("/getTGData", methods=['POST'])
 def getTGData():
-    global dataName
+    global dataName 
+    dataName = 'HeatedFlow'
     return jsonify(load_json_data(dataName))    # VortexWithMin HeatedFlowVelocity IonizationFront jungtelziemniak
 
 @app.route("/getScalarFields", methods=['POST'])
 def getScalarFields():
     ''' return the scalar fields data according to the give timstamps
     Args: 
+        {tRange: [0, 7]}
         tDict: {'LL-SF': t-2, 'L-SF': t-1, 'SF': t, 'SF-R': t+1, 'SF-RR': t+2}
     
     Returns:
@@ -33,10 +35,11 @@ def getScalarFields():
     '''
     global dataName
     paras = request.get_json()
-    print('paras', paras)
-    for key in paras:
-        paras[key] = -1 if paras[key] == -1 else load_SF_data(dataName, paras[key])
-    return jsonify(paras)
+    print(paras)
+    scalarFieldsLst = []
+    for t in range(paras['tRange'][0], paras['tRange'][1]+1):
+        scalarFieldsLst.append(load_SF_data(dataName, t))
+    return jsonify(scalarFieldsLst)
 
 
 if __name__ == '__main__':

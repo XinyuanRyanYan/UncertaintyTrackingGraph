@@ -62,6 +62,14 @@ function higlightNodesSSF(node){
     /**
      * highlight features of the five scalar fields 
      */
+    console.log('highlight the feature');
+    let centerIdx = focusT-tRange[0];
+    let singleSFMiddle = singleSFObjLst[centerIdx];
+    let singleSFLeft = centerIdx-1>=0? singleSFObjLst[centerIdx-1]:'';
+    let singleSFLeftL = centerIdx-2>=0? singleSFObjLst[centerIdx-2]:'';
+    let singleSFRight = centerIdx+1<singleSFObjNum? singleSFObjLst[centerIdx+1]:'';
+    let singleSFRightR = centerIdx+2<singleSFObjNum? singleSFObjLst[centerIdx+2]:'';
+
     singleSFMiddle.highlightFeatures([node]);
 
     // highight the parents and children of this feature
@@ -83,7 +91,7 @@ function higlightNodesSSF(node){
     for(let i = 0; i < pNodes.length; i++){
         let curNode = pNodes[i];
         for(let j = 0; j < curNode['parents'].length; j++){
-            if(node['parents'][i]['p']>pThreshould){
+            if(curNode['parents'][j]['p']>pThreshould){
                 ppNodes.push(curNode['parents'][j]['node']);
             }
         }
@@ -91,11 +99,12 @@ function higlightNodesSSF(node){
     for(let i = 0; i < cNodes.length; i++){
         let curNode = cNodes[i];
         for(let j = 0; j < curNode['children'].length; j++){
-            if(node['children'][i]['p']>pThreshould){
+            if(curNode['children'][j]['p']>pThreshould){
                 ccNodes.push(curNode['children'][j]['node']);
             }
         }
     }
+
     if(pNodes.length != 0){
         singleSFLeft.highlightFeatures(pNodes);
     }
@@ -143,11 +152,9 @@ function restoreNode(){
     highlightLinks = [];
     trajectorySF.restorePath(1);
 
-    singleSFLeftL.restore();
-    singleSFLeft.restore();
-    singleSFMiddle.restore();
-    singleSFRight.restore();
-    singleSFRightR.restore();
+    for(let i = 0; i < singleSFObjLst.length; i++){
+        singleSFObjLst[i].restore();
+    }
 }
 
 function getPorCInfo(node, drt, dis=10000000){

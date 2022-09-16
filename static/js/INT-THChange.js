@@ -89,11 +89,9 @@ function threshChangeReaction(){
     if(focusNode){
         trajectorySF.highlightPath(focusNode);
         // then highlight features in the scalar fields again
-        if(singleSFLeft){singleSFLeft.restore();}
-        if(singleSFLeftL){singleSFLeftL.restore();}
-        if(singleSFMiddle){singleSFMiddle.restore();}
-        if(singleSFRight){singleSFRight.restore();}
-        if(singleSFRightR){singleSFRightR.restore();}
+        for(let i = 0; i < singleSFObjLst.length; i++){
+            singleSFObjLst[i].restore();
+        }
         higlightNodesSSF(focusNode);
         // highlight the links in the tracking graph again
       

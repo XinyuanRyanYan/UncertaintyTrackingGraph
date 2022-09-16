@@ -1,6 +1,5 @@
 # python script for reducing the size of the matrix data
 import numpy as np
-from pyrsistent import m
 PATH_PREFIX = '../static/data'    # the prefix of the data path
 
 

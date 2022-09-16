@@ -34,7 +34,7 @@ let greenStartColor = greenScale(0.05);
 let greenStopColor = greenScale(0.9);
 
 // focused node or timestamp
-let focusT =  '';
+let focusT = '';
 let focusNode = '';
 let highlightNodes = [];    // the node id list of highlighted nodes
 let highlightLinks = [];    // the link id list of highlighted links
@@ -47,11 +47,15 @@ let SFAttr = {rows: '', cols: '', rotateAngle: '', h: '', w: ''};
 let scalarFieldColorScale = d3.scaleSequential([8000, 0], d3.interpolateGnBu); 
 
 // five scalar fields
-let singleSFMiddle = '';
-let singleSFLeft = '';
-let singleSFRight = '';
-let singleSFLeftL = '';
-let singleSFRightR = '';
+// let singleSFMiddle = '';
+// let singleSFLeft = '';
+// let singleSFRight = '';
+// let singleSFLeftL = '';
+// let singleSFRightR = '';
+let singleSFObjNum = 5;     // the number of shown 2D scalar fields
+let singleSFObjLst = [];    // the list of shown 2D scalar field objects
+let tRange = [];    // the timestamp range of scalar fields, like [1, 3] means 1, 2, 3
+
 // 3D scalar fields
 let trajectorySF = '';
 
@@ -121,6 +125,7 @@ axios.post('/getTGData', {
 function changeDataset(event){
     // trigger this when change the dataset
     const dataName = event.target.value;
+    singleSFObjNum = dataName == 'Sample'? 9:5;
     axios.post('/changeData', {
             data: dataName
         })
@@ -134,12 +139,12 @@ function changeDataset(event){
                 .domain(trackingGraphObj.pRange)
                 .range([startColor, stopColor]);
             // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
-            let vLst = [];
-            let vGap = (TGData.SFRange[1]-TGData.SFRange[0])/15;
-            for(let i = 0; i < 16; i++){
-                vLst.push(TGData.SFRange[0]+vGap*i);
-            }
-            scalarFieldColorScale = d3.scaleLinear().domain(vLst).range(colorMap); 
+            // let vLst = [];
+            // let vGap = (TGData.SFRange[1]-TGData.SFRange[0])/15;
+            // for(let i = 0; i < 16; i++){
+            //     vLst.push(TGData.SFRange[0]+vGap*i);
+            // }
+            // scalarFieldColorScale = d3.scaleLinear().domain(vLst).range(colorMap); 
             scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateViridis); 
 
         }).catch((err) => {
@@ -168,17 +173,22 @@ function initSF(){
      * reset the width of time div
      * init the 2d and 3d Saclar fields
      */
+    // clear all divs insides
+    d3.select('#timeAnalysisDiv').selectAll('*').remove();
+    singleSFObjLst = [];    // clear all scalar fields objects
+    // change the number of items in this div
+    d3.select('#timeAnalysisDiv').style('grid-template-columns', `repeat(${singleSFObjNum}, ${100/singleSFObjNum}%)`);
     let height = parseInt(d3.select('#timeAnalysisDiv').style('height'));
-    let width = SFAttr.w / SFAttr.h > 1?  height * SFAttr.w / SFAttr.h*4.9 : height * SFAttr.h / SFAttr.w*4.9
+    let width = SFAttr.w / SFAttr.h > 1?  height * SFAttr.w / SFAttr.h*(singleSFObjNum-0.12) : height * SFAttr.h / SFAttr.w*(singleSFObjNum-0.12);
 
     d3.select('#timeAnalysisDiv').style('width', width+'px');
 
-    // five scalar fields
-    singleSFMiddle = new SingleSF('#SFT');
-    singleSFLeft = new SingleSF('#SFLastT');
-    singleSFRight = new SingleSF('#SFNextT');
-    singleSFLeftL = new SingleSF('#SFLastTT');
-    singleSFRightR = new SingleSF('#SFNextTT');
+    // recreate all divs objects
+    for(let i = 0; i < singleSFObjNum; i++){
+        let divId = `div_${i}`;
+        d3.select('#timeAnalysisDiv').append('div').attr('id', divId);
+        singleSFObjLst.push(new SingleSF(`#${divId}`));
+    }   
     // 3D scalar fields
     trajectorySF = new Trajectory3D('#threeDPathDiv');
 }
@@ -191,35 +201,43 @@ function visScalarFields(t, nodeD){
      *  t: the focused timestamp
      *  nodeD: the focus feature
      */
-    let getTDict = (t)=>{
-        /* {'LL-SF': t-2, 'L-SF': t-1, 'SF': t, 'SF-R': t+1, 'SF-RR': t+2} */
-        let tDict = {'LL-SF': -1, 'L-SF': -1, 'SF': -1, 'SF-R': -1, 'SF-RR': -1};
-        function islegalT(t, T=trackingGraphObj.timestamps){
-            return t>=0&&t<T? true:false;
-        }
-        tDict['LL-SF'] = islegalT(t-2)? t-2:-1;
-        tDict['L-SF'] = islegalT(t-1)? t-1:-1;
-        tDict['SF'] = islegalT(t)? t:-1;
-        tDict['SF-R'] = islegalT(t+1)? t+1:-1;
-        tDict['SF-RR'] = islegalT(t+2)? t+2:-1;
-        return tDict;
-    }
 
+    // get the range of t, like [t-2, t-1, t, t+1, t+2, ...]; total number = SingleSFNum
+    let T = trackingGraphObj.timestamps;
+    let leftT = t-parseInt(singleSFObjNum/2);
+    let rightT = leftT + singleSFObjNum - 1;
+    if(leftT<0){rightT += -(leftT); leftT = 0;}
+    if(rightT>=T){leftT -= rightT-T+1; rightT = T-1;}
+    tRange = [leftT, rightT];
 
-    axios.post('/getScalarFields', getTDict(t))
+    axios.post('/getScalarFields', {'tRange': tRange})
         .then((result) => {
-            let scalarFields = result['data'];
-            singleSFLeftL.renderSF(scalarFields['LL-SF'], t-2, 0xF9CB9C); 
-            singleSFLeft.renderSF(scalarFields['L-SF'], t-1, 0xF9CB9C);
-            singleSFMiddle.renderSF(scalarFields['SF'], t, greenStopColor); 
-            singleSFRight.renderSF(scalarFields['SF-R'], t+1, 0xA4C2F4); 
-            singleSFRightR.renderSF(scalarFields['SF-RR'], t+2, 0xA4C2F4);
-            trajectorySF.rendering(scalarFields, t);
-            // console.log('render all featuresß');
+            let scalarFields = result['data']; // [[], [], ...]
+            console.log('sca', scalarFields);
+            // scalarFields for the 3D rendering
+            let scalarFieldsDict = {'LL-SF': -1, 'L-SF': -1, 'SF': -1, 'SF-R': -1, 'SF-RR': -1};     
+            for(let i = 0; i < singleSFObjNum; i++){ 
+                let tp = leftT+i;
+                let color = 0xFFFFFF;
+                if(tp==t){
+                    color = greenStopColor;
+                    scalarFieldsDict['SF'] = scalarFields[i];
+                }
+                else if(tp > t && tp < t+3){color = 0xA4C2F4;}
+                else if(tp < t && tp > t-3){color = 0xF9CB9C;}
+                if(tp == t-1){scalarFieldsDict['L-SF'] = scalarFields[i];}
+                else if(tp == t-2){scalarFieldsDict['LL-SF'] = scalarFields[i];}
+                else if(tp == t+1){scalarFieldsDict['SF-R'] = scalarFields[i];}
+                else if(tp == t+2){scalarFieldsDict['SF-RR'] = scalarFields[i];}
+                // console.log('i', i, scalarFields[i]);
+
+                singleSFObjLst[i].renderSF(scalarFields[i], tp, color);
+            }
+
+            trajectorySF.rendering(scalarFieldsDict, t);
 
             if(nodeD){
                 // five scalar feilds
-                // console.log('render features');
                 higlightNodesSSF(nodeD);
                 trajectorySF.highlightPath(nodeD); // 3D scalar feilds
             }
@@ -234,10 +252,8 @@ function visScalarFields(t, nodeD){
 function clearScalarFields(){
     if(trajectorySF){
         trajectorySF.reset();
-        singleSFMiddle.reset();
-        singleSFLeft.reset();
-        singleSFRight.reset();
-        singleSFLeftL.reset();
-        singleSFRightR.reset();
+        for(let i = 0; i < singleSFObjLst.length; i++){
+            singleSFObjLst[i].reset();
+        }
     }
 }
