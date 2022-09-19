@@ -9,6 +9,7 @@ return json
     scalarFields: [[scalar Field Matrix], [scalar Field Matrix], [], ...]
 }
 '''
+from difflib import ndiff
 from os import X_OK, name
 import numpy as np
 from numpy import PINF, append, mat, matrix, nested_iters, recarray, result_type, timedelta64, unravel_index
@@ -198,7 +199,6 @@ class Processor:
         if self.structure['mostFeatures'] < mostFeatures:
             self.structure['mostFeatures'] = mostFeatures
 
-
     # transform the probability matrix into the conditional probability matrix
     def trans_con_probability(self, matrix):
         (row_num, col_num) = matrix.shape
@@ -292,8 +292,8 @@ class Processor:
                 
     # load the numpy matrix from file 
     def read_Numpy_F(self, path):
-        with open(path, 'r') as f:
-            return np.loadtxt(path)
+        mtx = np.loadtxt(path, ndmin=2)
+        return mtx
 
     # get the new matrix based on the current matrix and the col_index_lst
     def get_new_matrix(self, matrix, col_index_lst):
