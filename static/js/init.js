@@ -98,7 +98,7 @@ axios.post('/getTGData', {
         initSFAttr();
         initSF();
         lineColorScale = d3.scaleLinear()
-            .domain(trackingGraphObj.pRange)
+            .domain([0, trackingGraphObj.pRange[1]])
             .range([startColor, stopColor]);
         // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
         scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateViridis); 
@@ -136,7 +136,7 @@ function changeDataset(event){
             initSFAttr();
             initSF();
             lineColorScale = d3.scaleLinear()
-                .domain(trackingGraphObj.pRange)
+                .domain([0, trackingGraphObj.pRange[1]])
                 .range([startColor, stopColor]);
             // scalarFieldColorScale = d3.scaleSequential(TGData.SFRange, d3.interpolateGnBu); 
             // let vLst = [];

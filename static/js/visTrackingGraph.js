@@ -17,7 +17,7 @@ class VisTrackingGraph{
         this.edgeWid = 1.5;
 
         // 2. set the color scale
-        this.lineColorScale = '';
+        // this.lineColorScale = '';
         this.highlightColorScale = '';
         this.initColorScale();
 
@@ -41,7 +41,7 @@ class VisTrackingGraph{
 
         // 6. visualize the legend
         Legend(d3.select('#pureGTDiv').append('div').classed('legendDiv', true), 
-            {probRange: trackingGraphObj.pRange});
+            {probRange: [0, trackingGraphObj.pRange[1]]});
         d3.select('.legendDiv').style('top', 35+divHei-60+'px')
             .style('left', parseInt(d3.select('#threeDPathDiv').style('wdith'))+60+'px');
 
@@ -56,10 +56,10 @@ class VisTrackingGraph{
 
     initColorScale(){
         this.lineColorScale = d3.scaleLinear()
-            .domain(trackingGraphObj.pRange)
+            .domain([0, trackingGraphObj.pRange[1]])
             .range([startColor, stopColor]);
         this.highlightColorScale = d3.scaleLinear()
-            .domain(trackingGraphObj.pRange)
+            .domain([0, trackingGraphObj.pRange[1]])
             .range([greenStartColor, greenStopColor]);
     }
 
