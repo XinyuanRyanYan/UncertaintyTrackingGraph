@@ -3,11 +3,11 @@ import numpy as np
 PATH_PREFIX = '../static/data'    # the prefix of the data path
 
 
-data_name = 'Sample'        # HeatedFlow VortexStreet IonizationFront jungtelziemniak
+data_name = 'UnsteadyCylinderFlow'        # HeatedFlow VortexWithMin  IonizationFront jungtelziemniak Sample UnsteadyCylinderFlow
 MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/data_'
 # MATRIX_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/matrix/monoMesh_'
 
-t = 20;   # 31; 59; 123; 499
+t = 499;   # 31; 59; 123; 499; 20
 for i in range(t):
     file_name = MATRIX_FILE_PREFIX+str(i)+'.txt'
     mtx = np.loadtxt(file_name)

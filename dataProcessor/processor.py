@@ -514,7 +514,7 @@ class Processor:
 
 if __name__ == '__main__':
     # new name: HeatedFlow; 
-    data_name = 'Sample'        # HeatedFlow VortexStreet IonizationFront UnsteadyCylinderFlow
+    data_name = 'VortexWithMin'        # HeatedFlow VortexWithMin IonizationFront UnsteadyCylinderFlow Sample
 
     # init all of the path
     NODE_FILE_PREFIX = PATH_PREFIX+'/'+data_name+'/track/treeNode_highlight_'
